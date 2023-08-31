@@ -26,7 +26,6 @@ body {
 }
 
 .menu .logo {
-
     padding: 10px 0;
 }
 
@@ -304,7 +303,6 @@ body {
 .content {
     float: left;
     padding: 10px;
-    overflow-y: scroll;
 }
 
 .content .search-input form {
@@ -324,6 +322,11 @@ body {
     outline: none;
     padding: 10px;
     background-color: #ffffff;
+}
+
+.posts {
+    overflow-y: scroll;
+    height: 100vh;
 }
 
 .post_card {
