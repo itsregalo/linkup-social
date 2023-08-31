@@ -10,7 +10,6 @@ body {
 }
 
 .main-content {
-   
 }
 
 .menu, .most-right {
@@ -23,6 +22,7 @@ body {
 
 .menu {
     float: left;
+
 }
 
 .menu .logo {
@@ -299,6 +299,73 @@ body {
     text-align: right;
     padding: 10px 0;
 }
+
+/* content */
+.content {
+    float: left;
+    padding: 10px;
+    overflow-y: scroll;
+}
+
+.content .search-input form {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #e4e4e4;
+}
+
+.content .search-input form input {
+    width: 100%;
+    height: 40px;
+    border: 1px solid #a3a3a3;
+    outline: none;
+    padding: 10px;
+    background-color: #ffffff;
+}
+
+.post_card {
+    width: 100%;
+    background-color: #ffffff;
+}
+
+.post_head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+
+.post_head .profile_pic_user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0px 10px 0px 10px;
+}
+
+.post_head .daysince_more_options {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0px 10px 0px 10px;
+}
+
+.like_comment_share {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0px 10px 0px 10px;
+}
+
+.like, .comment, .share {
+    display: flex;
+    gap: 5px;
+    padding: 0px 10px 0px 10px;
+    cursor: pointer;
+}
+
 
 @media screen and (max-width:1000px) {
     .login_right {
