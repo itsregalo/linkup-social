@@ -1,0 +1,346 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #e4e4e4;
+    font-family: 'Nunito Sans', sans-serif;
+}
+
+.main-content {
+   
+}
+
+.menu, .most-right {
+    background-color: #ffffff;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.menu {
+    float: left;
+}
+
+.menu .logo {
+
+    padding: 10px 0;
+}
+
+.menu-links {
+    padding: 10px 0;
+}
+
+.menu-links .menu-link-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #e4e4e4;
+}
+
+.menu-links .menu-link-item a {
+    text-decoration: none;
+    color: #000000;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.menu-links .menu-link-item img {
+    width: 20px;
+    margin-right: 10px;
+}
+
+.menu-links .menu-link-item:hover {
+    background-color: #e4e4e4;
+}
+
+.topics {
+    width: 80%;
+    float: left;
+    padding: 10px;
+}
+
+.topics h5 {
+    font-size: 18px;
+    font-weight: 600;
+    padding: 10px 0;
+}
+
+.topics .topic-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #e4e4e4;
+}
+
+.topics .topic-item a {
+    text-decoration: none;
+    color: #000000;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.new_post {
+    width: 100%;
+    float: left;
+    padding: 10px;
+}
+
+.new_post_form {
+    width: 100%;
+    float: left;
+    padding: 10px;
+    background-color: #e4e4e4;
+    border-radius: 10px;
+}
+
+.new_post_form textarea {
+    width: 100%;
+    height: 60px;
+    border: none;
+    outline: none;
+    padding: 10px;
+    border-radius: 10px;
+    resize: none;
+    background-color: #e4e4e4;
+}
+
+.bottom_inputs {
+    display: flex;
+}
+
+.bottom_inputs button {
+    width: 60px;
+    height: 40px;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    background-color: #686868;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.bottom_inputs button:hover {
+    background-color: #000000;
+    color: white;
+}
+
+
+.add_image_to_post::before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-image: url(/client/assets/images/icons/image-outline.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.add_image_to_post:hover::before {
+    cursor: pointer;
+}
+
+
+
+.friends-suggestion {
+    width: 100%;
+    float: left;
+    padding: 10px;
+    background-color: #e4e4e4;
+    border-radius: 10px;
+}
+
+.friends-suggestion h5 {
+    font-size: 15px;
+    font-weight: 600;
+    padding: 10px 0;
+    border-bottom: solid 1px #a9a9a9;
+}
+
+.suggestions_container {
+    width: 100%;
+    padding: 10px 0;
+    border-bottom: solid 1px #a9a9a9;
+}
+
+.single_suggested_user {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    font-size: 14px;
+
+}
+
+.suggested-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.suggested-profile img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.suggested-profile .user_name_handle {
+    display: flex;
+    flex-direction: column;
+}
+
+.show_more {
+    color: #686868;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.whats_happening_section {
+    width: 100%;
+    padding: 10px;
+    background-color: #e4e4e4;
+    border-radius: 10px;
+}
+
+.happening_profile .user_name_handle {
+    display: flex;
+    flex-direction: row;
+}
+
+/* Login Page */
+.login-section {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login_left {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap:20px;
+}
+
+.login_left img {
+    width: 70%;
+}
+
+.login_right {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.login-form-area {
+    height: fit-content;
+    width: 60%;
+    background-color: white;
+    padding: 50px 20px;
+    border-radius: 10px;
+}
+
+.register-form-area {
+    height: fit-content;
+    width: 80%;
+    background-color: white;
+    padding: 40px 20px;
+    border-radius: 10px;
+}
+
+.login-form-area h3 {
+    font-size: 30px;
+    font-weight: 800;
+    padding: 10px 0;
+}
+
+.forgot_password_link {
+    text-align: right;
+}
+
+.forgot_password_link a {
+    text-decoration: none;
+    color: #060606;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.forgot_password_link a:hover {
+    color: #000000;
+}
+
+.login_btn button {
+    width: 100%;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    background-color: #000000;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.login_btn button:hover {
+    background-color: #686868;
+    color: #ffffff;
+}
+
+.signup_link {
+    text-align: right;
+    padding: 10px 0;
+}
+
+@media screen and (max-width:1000px) {
+    .login_right {
+        width: 100%;
+    }
+
+    .login-right img {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width:768px){
+
+    /* login page */
+    .login_left {
+        display: none;
+    }
+
+    .login_right {
+        width: 100%;
+    }
+
+    .login-right img {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width:400){
+    
+        /* login page */
+        .login_right {
+            width: 100%;
+        }
+
+        .login-form-area {
+            width: 100%;
+            height: fit-content;
+        }
+
+        .register-form-area {
+            width: 100%;
+            height: fit-content;
+        }
+    }
+
