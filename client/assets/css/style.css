@@ -18,6 +18,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    padding: 10px;
 }
 
 .menu {
@@ -367,6 +368,34 @@ body {
     gap: 5px;
     padding: 0px 10px 0px 10px;
     cursor: pointer;
+}
+
+/* Profile */
+.profile_area {
+    width: 100%;
+    float: left;
+    padding: 10px;
+    overflow-y: scroll;
+    height: 100vh;
+}
+
+.head_with_username {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    background-color: #ffffff;
+}
+
+.user_profile_area {
+    float: left;
+    background-color: #ffffff;
+}
+
+/* make profile photo appear between these two divs above and below */
+.user_profile_area .profile_pic {
+    float: left;
+    background-color: #ffffff;
 }
 
 
