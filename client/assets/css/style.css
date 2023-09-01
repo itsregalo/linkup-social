@@ -393,11 +393,49 @@ body {
 }
 
 /* make profile photo appear between these two divs above and below */
+.profile_photo {
+    padding: 0 10px;
+}
+
+.profile_photo img {
+    border-radius: 50%;
+}
+
 .user_profile_area .profile_pic {
     float: left;
     background-color: #ffffff;
 }
 
+.user_info {
+    float: left;
+    background-color: #ffffff;
+    padding: 0 10px;
+}
+
+.location_date_joined {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+    padding: 10px 0;
+    background-color: #ffffff;
+}
+
+.posts_navigation {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #ffffff;
+}
+
+.posts_navigation a {
+    text-decoration: none;
+    color: #000000;
+    font-size: 16px;
+    font-weight: 600;
+}
 
 @media screen and (max-width:1000px) {
     .login_right {
