@@ -395,10 +395,12 @@ body {
 /* make profile photo appear between these two divs above and below */
 .profile_photo {
     padding: 0 10px;
+    position: absolute;
 }
 
 .profile_photo img {
     border-radius: 50%;
+    display: block;
 }
 
 .user_profile_area .profile_pic {
@@ -437,6 +439,29 @@ body {
     font-weight: 600;
 }
 
+.mobile-nav {
+    display: none;
+    padding: 10px;
+}
+
+.mobile_add_new_button {
+    background-color: #a3a3a3;
+    border-radius: 50%;
+}
+
+.mobile_add_new_button img {
+    width: 30px;
+    height: 30px;
+    color: #ffffff;
+    padding: 10px;
+    
+}
+
+.mobile_header {
+    display: none;
+}
+
+
 @media screen and (max-width:1000px) {
     .login_right {
         width: 100%;
@@ -461,9 +486,13 @@ body {
     .login-right img {
         width: 100%;
     }
+
+    .most-right {
+        display: none;
+    }
 }
 
-@media screen and (max-width:400){
+@media screen and (max-width:578px){
     
         /* login page */
         .login_right {
@@ -478,6 +507,20 @@ body {
         .register-form-area {
             width: 100%;
             height: fit-content;
+        }
+
+        .menu {
+            display: none;
+        }
+
+        .mobile-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #ffffff;
+            bottom: 0;
+            position: fixed;
         }
     }
 
