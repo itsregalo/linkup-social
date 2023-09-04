@@ -1,7 +1,4 @@
-
 USE linkup_social_db;
-
-
 
 -- Table: posts
 DROP TABLE IF EXISTS posts;
