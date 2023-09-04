@@ -7,9 +7,13 @@
 body {
     background-color: #e4e4e4;
     font-family: 'Nunito Sans', sans-serif;
+    overflow-y: hidden;
 }
 
 .main-content {
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
 }
 
 .menu, .most-right {
@@ -303,7 +307,8 @@ body {
 /* content */
 .content {
     float: left;
-    padding: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
 }
 
 .content .search-input form {
@@ -327,12 +332,13 @@ body {
 
 .posts {
     overflow-y: scroll;
-    height: 100vh;
+    height: 85vh;
 }
 
 .post_card {
     width: 100%;
     background-color: #ffffff;
+    margin-top: 10px;
 }
 
 .post_head {
@@ -382,6 +388,7 @@ body {
 .head_with_username {
     display: flex;
     align-items: center;
+    justify-content: start;
     gap: 10px;
     padding: 10px 0;
     background-color: #ffffff;
@@ -395,7 +402,7 @@ body {
 /* make profile photo appear between these two divs above and below */
 .profile_photo {
     padding: 0 10px;
-    position: absolute;
+    margin-top: -50px;
 }
 
 .profile_photo img {
@@ -468,7 +475,33 @@ body {
 
 .user_posts {
     padding-top: 10px;
+    height: 85vh;
 }
+
+.nav_icon {
+    width: 20px;
+    height: 20px;
+}
+
+.nav_icon a {
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.nav_icon a img {
+    width: 30px;
+    height: 20px;
+}
+
+
+.post_link {
+    text-decoration: none;
+    color: #000000;
+    font-size: 16px;
+    font-weight: 600;
+}
+
 
 
 
