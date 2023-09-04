@@ -7,9 +7,13 @@
 body {
     background-color: #e4e4e4;
     font-family: 'Nunito Sans', sans-serif;
+    overflow-y: hidden;
 }
 
 .main-content {
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
 }
 
 .menu, .most-right {
@@ -303,7 +307,8 @@ body {
 /* content */
 .content {
     float: left;
-    padding: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
 }
 
 .content .search-input form {
@@ -327,12 +332,13 @@ body {
 
 .posts {
     overflow-y: scroll;
-    height: 100vh;
+    height: 85vh;
 }
 
 .post_card {
     width: 100%;
     background-color: #ffffff;
+    margin-top: 10px;
 }
 
 .post_head {
@@ -382,6 +388,7 @@ body {
 .head_with_username {
     display: flex;
     align-items: center;
+    justify-content: start;
     gap: 10px;
     padding: 10px 0;
     background-color: #ffffff;
@@ -395,10 +402,12 @@ body {
 /* make profile photo appear between these two divs above and below */
 .profile_photo {
     padding: 0 10px;
+    margin-top: -50px;
 }
 
 .profile_photo img {
     border-radius: 50%;
+    display: block;
 }
 
 .user_profile_area .profile_pic {
@@ -437,6 +446,65 @@ body {
     font-weight: 600;
 }
 
+.mobile-nav {
+    display: none;
+    padding: 10px;
+}
+
+.mobile_add_new_button {
+    background-color: #a3a3a3;
+    border-radius: 50%;
+}
+
+.mobile_add_new_button img {
+    width: 30px;
+    height: 30px;
+    color: #ffffff;
+    padding: 10px;
+    
+}
+
+.mobile_header {
+    display: none;
+}
+
+.user_follow_followers {
+    display: flex;
+    gap: 30px;
+}
+
+.user_posts {
+    padding-top: 10px;
+    height: 85vh;
+}
+
+.nav_icon {
+    width: 20px;
+    height: 20px;
+}
+
+.nav_icon a {
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.nav_icon a img {
+    width: 30px;
+    height: 20px;
+}
+
+
+.post_link {
+    text-decoration: none;
+    color: #000000;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+
+
+
 @media screen and (max-width:1000px) {
     .login_right {
         width: 100%;
@@ -461,9 +529,13 @@ body {
     .login-right img {
         width: 100%;
     }
+
+    .most-right {
+        display: none;
+    }
 }
 
-@media screen and (max-width:400){
+@media screen and (max-width:578px){
     
         /* login page */
         .login_right {
@@ -478,6 +550,32 @@ body {
         .register-form-area {
             width: 100%;
             height: fit-content;
+        }
+
+        .menu {
+            display: none;
+        }
+
+        .mobile-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #ffffff;
+            bottom: 0;
+            position: fixed;
+        }
+
+        .mobile_header{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ffffff;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            width: 100%;
         }
     }
 
