@@ -7,15 +7,14 @@ DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
     id VARCHAR(255) NOT NULL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
     location VARCHAR(255) NOT NULL,
-    bio VARCHAR(255) NOT NULL,
-    profile_picture VARCHAR(255) NOT NULL,
-    background_picture VARCHAR(255) NOT NULL,
+    bio VARCHAR(255),
+    profile_picture VARCHAR(255),
+    background_picture VARCHAR(255),
     password VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );

@@ -11,17 +11,16 @@ DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
     id VARCHAR(255) NOT NULL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
     location VARCHAR(255) NOT NULL,
-    bio VARCHAR(255) NOT NULL,
-    profile_picture VARCHAR(255) NOT NULL,
-    background_picture VARCHAR(255) NOT NULL,
+    bio VARCHAR(255),
+    profile_picture VARCHAR(255),
+    background_picture VARCHAR(255),
     password VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Table: posts
@@ -30,11 +29,10 @@ DROP TABLE IF EXISTS posts;
 CREATE TABLE posts (
     id VARCHAR(255) NOT NULL PRIMARY KEY,
     user_id VARCHAR(255) NOT NULL,
-    content VARCHAR(255) NOT NULL,
-    picture VARCHAR(255) NOT NULL,
-    content VARCHAR(1000) NOT NULL,
-    post_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    picture VARCHAR(255),
+    content NVARCHAR(MAX) NOT NULL,
+    post_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
@@ -45,9 +43,9 @@ CREATE TABLE post_comments (
     id VARCHAR(255) NOT NULL PRIMARY KEY,
     user_id VARCHAR(255) NOT NULL,
     post_id VARCHAR(255) NOT NULL,
-    content VARCHAR(255) NOT NULL,
-    comment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    content VARCHAR(500) NOT NULL,
+    comment_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (post_id) REFERENCES posts(id)
 );
@@ -59,8 +57,8 @@ CREATE TABLE post_likes (
     id VARCHAR(255) NOT NULL PRIMARY KEY,
     user_id VARCHAR(255) NOT NULL,
     post_id VARCHAR(255) NOT NULL,
-    like_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    like_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (post_id) REFERENCES posts(id)
 );
@@ -73,8 +71,8 @@ CREATE TABLE comment_replies (
     user_id VARCHAR(255) NOT NULL,
     comment_id VARCHAR(255) NOT NULL,
     content VARCHAR(255) NOT NULL,
-    reply_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    reply_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (comment_id) REFERENCES post_comments(id)
 );
@@ -87,8 +85,8 @@ CREATE TABLE comment_likes (
     id VARCHAR(255) NOT NULL PRIMARY KEY,
     user_id VARCHAR(255) NOT NULL,
     comment_id VARCHAR(255) NOT NULL,
-    like_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    like_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (comment_id) REFERENCES post_comments(id)
 );
@@ -101,8 +99,8 @@ CREATE TABLE followers (
     id VARCHAR(255) NOT NULL PRIMARY KEY,
     user_id VARCHAR(255) NOT NULL,
     follower_id VARCHAR(255) NOT NULL,
-    follow_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    follow_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (follower_id) REFERENCES users(id)
 );
@@ -115,8 +113,8 @@ CREATE TABLE following (
     id VARCHAR(255) NOT NULL PRIMARY KEY,
     user_id VARCHAR(255) NOT NULL,
     following_id VARCHAR(255) NOT NULL,
-    follow_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    follow_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (following_id) REFERENCES users(id)
 );

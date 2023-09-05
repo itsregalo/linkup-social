@@ -316,7 +316,6 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px;
     border-radius: 10px;
     background-color: #e4e4e4;
 }
@@ -331,8 +330,10 @@ body {
 }
 
 .posts {
+    margin-top:20px;
+    padding-bottom: 50px;
     overflow-y: scroll;
-    height: 85vh;
+    height: 90vh;
 }
 
 .post_card {
@@ -345,7 +346,10 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 0;
+}
+
+.card-header.post_head {
+    padding-bottom: 0;
 }
 
 .post_head .profile_pic_user {
@@ -353,6 +357,12 @@ body {
     align-items: center;
     gap: 10px;
     padding: 0px 10px 0px 10px;
+}
+
+.profile_pic_user img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
 }
 
 .post_head .daysince_more_options {
@@ -388,11 +398,39 @@ body {
 .head_with_username {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #ffffff;
+    width: 100%;
+    top: 0;
+}
+
+.head_with_username .align_right {
+    display: flex;
+    align-items: center;
     justify-content: start;
     gap: 10px;
-    padding: 10px 0;
+}
+
+.search_form_head form {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    border-radius: 10px;
+    gap: 10px;
+}
+
+.head_with_username .search_form_head form input {
+    width: 60%;
+    height: 30px;
+    border: 1px solid #a3a3a3;
+    border-radius: 10px;
+    outline: none;
+    padding: 10px;
     background-color: #ffffff;
 }
+
 
 .user_profile_area {
     float: left;
@@ -451,19 +489,10 @@ body {
     padding: 10px;
 }
 
-.mobile_add_new_button {
-    background-color: #a3a3a3;
-    border-radius: 50%;
-}
-
 .mobile_add_new_button img {
     width: 30px;
     height: 30px;
-    color: #ffffff;
-    padding: 10px;
-    
 }
-
 .mobile_header {
     display: none;
 }
@@ -603,6 +632,189 @@ body {
     cursor: pointer;
 }
 
+.followers_following_area {
+    width: 100%;
+    padding: 10px;
+    overflow-y: scroll;
+    height: 90vh;
+}
+
+.followers_following_container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.single_follower {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px;
+    background-color: #ffffff;
+    border-radius: 10px;
+}
+
+.follower_card_head {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.follower_left {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+
+.user_name_handle a{
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: #464646;
+    font-weight: 600;
+}
+
+.user_name_handle a h6{
+    padding: 0;
+    margin: 0;
+}
+
+.mobile_head_nav {
+    display: none;
+}
+
+
+/* dark theme */
+.toggle_theme {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    padding: 10px;
+    background-color: #ffffff;
+    bottom: 0;
+}
+
+.toggle_theme button {
+    border: none;
+    outline: none;
+    background-color: #ffffff;
+    cursor: pointer;
+}
+
+.toggle_theme button img {
+    width: 20px;
+    height: 20px;
+}
+
+body.dark {
+    background-color: #404040;
+}
+
+body.dark .menu, body.dark .most-right {
+    background-color: #939393;
+    color: #ffffff;
+}
+
+body.dark .menu-links .menu-link-item a {
+    color: #ffffff;
+}
+
+body.dark .topics .topic-item a {
+    color: #ffffff;
+}
+
+body.dark .new_post_form textarea {
+    background-color: #939393;
+}
+
+body.dark .friends-suggestion {
+    background-color: #939393;
+}
+
+body.dark .suggested-profile .user_name_handle a {
+    color: #ffffff;
+}
+
+body.dark .whats_happening_section {
+    background-color: #939393;
+}
+
+body.dark .happening_profile .user_name_handle a {
+    color: #ffffff;
+}
+
+body.dark .login-form-area {
+    background-color: #939393;
+}
+
+body.dark .register-form-area {
+    background-color: #939393;
+}
+
+body.dark .login-form-area h3 {
+    color: #ffffff;
+}
+
+body.dark .login-form-area input {
+    background-color: #939393;
+}
+
+body.dark .login-form-area button {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+body.dark .login-form-area button:hover {
+    background-color: #686868;
+    color: #ffffff;
+}
+
+body.dark .login-form-area a {
+    color: #ffffff;
+}
+
+body.dark .login-form-area a:hover {
+    color: #000000;
+}
+
+
+body.dark .content .search-input form input {
+    background-color: #939393;
+}
+
+body.dark .posts {
+    background-color: #939393;
+}
+
+body.dark .post_card {
+    background-color: #939393;
+}
+
+body.dark .post_head {
+    background-color: #939393;
+}
+
+body.dark .post_head .profile_pic_user {
+    background-color: #939393;
+}
+
+body.dark .post_head .daysince_more_options {
+    background-color: #939393;
+}
+
+body.dark .like_comment_share {
+    background-color: #939393;
+}
+
+body.dark .like, body.dark .comment, body.dark .share {
+    background-color: #939393;
+}
+
+/* Profile */
 
 
 @media screen and (max-width:1000px) {
@@ -615,7 +827,7 @@ body {
     }
 }
 
-@media screen and (max-width:768px){
+@media screen and (max-width:820px){
 
     /* login page */
     .login_left {
@@ -664,6 +876,7 @@ body {
             background-color: #ffffff;
             bottom: 0;
             position: fixed;
+            width: 100vw;
         }
 
         .mobile_header{
@@ -676,6 +889,81 @@ body {
             z-index: 1;
             top: 0;
             width: 100%;
+        }
+
+        .content {
+            padding: 0;
+        }
+
+        .new_post_form_area {
+            width: 100vw;
+            height: fit-content;
+            padding: 10px;
+            background-color: #e4e4e4;
+            border-radius: 10px;
+        }
+
+        .new_post_form {
+            background-color: #d7d7d7;
+        }
+
+        .new_post_form select {
+            height: 40px;
+            border: none;
+            outline: none;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #d7d7d7;
+        }
+
+        .new_post_form textarea {
+            width: 100%;
+            height: 50vh;
+            border: none;
+            outline: none;
+            padding: 10px;
+            border-radius: 10px;
+            resize: none;
+        }
+
+
+
+        .bottom_inputs {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .mobile_head_nav {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ffffff;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            width: 100%;
+            padding: 10px;
+        }
+
+        .mobile_head_nav .logo_mobile_head img {
+            height: 40px;
+        }
+
+        .mobile_head_nav .profile_icon_mobile img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+
+        .profile_pic_user img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+
+        .card-header.post_head {
+            padding-bottom: 0;
         }
     }
 
