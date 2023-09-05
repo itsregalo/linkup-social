@@ -5,7 +5,8 @@ const {v4} = require('uuid'); // for generating UUIDs
 
 const userRegistration = async (req, res) => {
     try {
-        const 
+        const {email, username, full_name}
     } catch (error) {
         
     }
+}
