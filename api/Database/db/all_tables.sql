@@ -14,7 +14,7 @@ CREATE TABLE users (
     username VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     full_name VARCHAR(255) NOT NULL,
-    location VARCHAR(255) NOT NULL,
+    location VARCHAR(255),
     bio VARCHAR(255),
     profile_picture VARCHAR(255),
     background_picture VARCHAR(255),
