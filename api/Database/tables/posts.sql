@@ -139,5 +139,4 @@ CREATE TABLE following (
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (following_id) REFERENCES users(id)
 );
-
--- procedure: create_post
+GO
