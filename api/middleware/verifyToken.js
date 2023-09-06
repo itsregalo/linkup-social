@@ -9,7 +9,7 @@ const verifyToken = async (req, res, next) => {
                 message: "Access denied"
             });
         } else {
-            const decoded_token = jwt.verify(token, process.env.JWT_SECRET);
+            const decoded_token = jwt.verify(token, process.env.TOKEN_SECRET);
             req.user = decoded_token;
             next();
         }
