@@ -172,8 +172,6 @@ const createPostCategoryController = async (req, res) => {
     }
 }
 
-//
-
 
 module.exports = {
     createPostController,

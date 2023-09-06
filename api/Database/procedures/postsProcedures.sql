@@ -48,6 +48,16 @@ BEGIN
 END;
 GO
 
+-- procedure: get category by name
+CREATE OR ALTER PROCEDURE get_category_by_name_proc(
+    @name VARCHAR(255)
+)
+AS
+BEGIN
+    SELECT * FROM post_category WHERE name = @name;
+END;
+GO
+
 -- procedure: get_post_comments
 CREATE OR ALTER PROCEDURE get_post_comments_proc(
     @post_id VARCHAR(255)
@@ -87,3 +97,4 @@ BEGIN
     SELECT * FROM comment_likes WHERE comment_id = @comment_id;
 END;
 GO
+
