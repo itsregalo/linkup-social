@@ -1,4 +1,3 @@
-
 USE linkup_social_db;
 GO;
 
@@ -75,3 +74,9 @@ BEGIN
     SELECT * FROM users WHERE username = @username OR email = @email;
 END;
 GO;
+-- get all users procedure
+CREATE OR ALTER PROCEDURE get_all_users_proc
+AS
+BEGIN
+    SELECT * FROM users;
+END;

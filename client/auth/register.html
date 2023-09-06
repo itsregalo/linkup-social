@@ -29,30 +29,33 @@
                         <img src="/client/assets/images/link_up_logo.png" alt="" width="200px">
                     </div>
                     <h3>Welcome Onboard</h3>
+                    <div class="message">
+
+                    </div>
                     <form action="" method="post">
                         <div class="form-group pb-3">
                             <label for="email">Email Address</label>
-                            <input type="email" name="email" id="register_email" class="form-control" placeholder="Enter your email address">
+                            <input type="email" name="email" id="register_email" class="form-control" placeholder="Enter your email address" required>
                         </div>
 
                         <div class="form-group pb-3">
                             <label for="username">Username</label>
-                            <input type="text" name="username" id="register_username" class="form-control" placeholder="Enter your username">
+                            <input type="text" name="username" id="register_username" class="form-control" placeholder="Enter your username" required>
                         </div>
 
                         <div class="form-group pb-3">
                             <label for="full_name">Full Name</label>
-                            <input type="text" name="full_name" id="register_full_name" class="form-control" placeholder="Enter your full_name">
+                            <input type="text" name="full_name" id="register_full_name" class="form-control" placeholder="Enter your full_name" required>
                         </div>
 
                         <div class="form-group pb-3">
                             <label for="password">Password</label>
-                            <input type="password" name="" id="register_password" class="form-control" placeholder="Enter your password">
+                            <input type="password" name="" id="register_password" class="form-control" placeholder="Enter your password" required>
                         </div>
 
                         <div class="form-group pb-3">
                             <label for="repeat_password">Repeat Password</label>
-                            <input type="password" name="" id="register_repeat_password" class="form-control" placeholder="Enter your password">
+                            <input type="password" name="" id="register_repeat_password" class="form-control" placeholder="Enter your password" required>
                         </div>
 
                         <div class="form-group login_btn pb-2">
@@ -71,5 +74,50 @@
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     <script src="/client/assets/js/main.js"></script>
+    <script>
+        // validate login form, password and repeat password
+        const registerForm = document.querySelector('.register-form-area form');
+
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const email = document.querySelector('#register_email').value;
+            const username = document.querySelector('#register_username').value;
+            const full_name = document.querySelector('#register_full_name').value;
+            const password = document.querySelector('#register_password').value;
+            const repeat_password = document.querySelector('#register_repeat_password').value;
+
+            const message = document.querySelector('.register-form-area .message');
+
+            if (email === '' || username === '' || full_name === '' || password === '' || repeat_password === '') {
+                message.innerHTML = `
+                    <div class="alert alert-danger" role="alert">
+                        All fields are required
+                    </div>
+                `;
+            } else if (password !== repeat_password) {
+                message.innerHTML = `
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Oops!</strong> Passwords do not match.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `;
+            } else {
+                message.innerHTML = `
+                    <div class="alert alert-success" role="alert">
+                        Registering...
+                    </div>
+                `;
+
+                setTimeout(() => {
+                    message.innerHTML = `
+                        <div class="alert alert-success" role="alert">
+                            Registration successful
+                        </div>
+                    `;
+                }, 1000);
+            }
+        });
+    </script>
 </body>
 </html>

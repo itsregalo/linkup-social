@@ -27,7 +27,6 @@ body {
 
 .menu {
     float: left;
-
 }
 
 .menu .logo {
@@ -577,6 +576,7 @@ body {
 .comments_section {
     background-color: #ffffff;
     display: flex;
+    flex-direction: column;
 }
 
 .current_user_profile_pic {
@@ -1009,6 +1009,10 @@ body.dark .like, body.dark .comment, body.dark .share {
 
         .card-header.post_head {
             padding-bottom: 0;
+        }
+
+        .search-input {
+            margin: 10px;
         }
     }
 

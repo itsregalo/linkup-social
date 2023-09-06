@@ -1,3 +1,11 @@
+-- KILL ALL CONNECTIONS TO THE DATABASE
+-- This is necessary to drop the database
+
+-- USE master;
+
+-- ALTER DATABASE linkup_social_db SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+
+
 DROP DATABASE IF EXISTS linkup_social_db;
 
 CREATE DATABASE linkup_social_db;
