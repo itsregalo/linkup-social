@@ -95,6 +95,7 @@ CREATE TABLE comment_replies (
     comment_id VARCHAR(255) NOT NULL,
     content VARCHAR(255) NOT NULL,
     is_deleted BIT DEFAULT 0,
+    parent_id VARCHAR(255),
     reply_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME,
     FOREIGN KEY (user_id) REFERENCES users(id),
