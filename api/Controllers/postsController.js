@@ -2,6 +2,11 @@ const mssql = require('mssql');
 const {v4} = require('uuid');
 const sqlConfig = require('../Config/Config');
 
+
+/**
+ * Post Controllers
+ */
+
 // Get All Posts Controller
 const getAllPostsController = async (req, res) => {
     try {
@@ -193,6 +198,103 @@ const updatePostController = async (req, res) => {
     }
 }
 
+// Delete Post Controller, Soft Delete
+const deletePostController = async (req, res) => {
+    try {
+        const authenticated_user = req.user;
+        const {id} = req.params;
+
+        const pool = await mssql.connect(sqlConfig);
+
+        // checking if the post exist
+        const post = await pool.request()
+            .input('id', mssql.VarChar, id)
+            .execute('get_post_by_id_proc');
+
+        if (post.recordset.length === 0) {
+            return res.status(404).json({
+                message: 'Post not found'
+            });
+        }
+
+        // assertaining that the user is the owner of the post
+        if (post.recordset[0].user_id !== authenticated_user.id) {
+            return res.status(401).json({
+                message: 'You cannot delete this post!'
+            });
+        }
+
+        // deleting the post
+        const deletedPost = await pool.request()
+            .input('id', mssql.VarChar, id)
+            .execute('soft_delete_post_proc');
+
+        return res.status(200).json({
+            message: 'Post deleted successfully',
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+}
+
+// Like Unlike Post Controller
+const likeUnlikePostController = async (req, res) => {
+    try {
+        const authenticated_user = req.user;
+        const {id} = req.params;
+
+        const pool = await mssql.connect(sqlConfig);
+
+        // checking if the post exist
+        const post = await pool.request()
+            .input('id', mssql.VarChar, id)
+            .execute('get_post_by_id_proc');
+
+        if (post.recordset.length === 0) {
+            return res.status(404).json({
+                message: 'Post not found'
+            });
+        }
+
+        // checking if the user has liked the post
+        const like = await pool.request()
+            .input('post_id', mssql.VarChar, id)
+            .input('user_id', mssql.VarChar, authenticated_user.id)
+            .execute('if_user_liked_post_proc');
+
+        if (like.recordset.length > 0) {
+            // unlike the post
+            const unlike = await pool.request()
+                .input('post_id', mssql.VarChar, id)
+                .input('user_id', mssql.VarChar, authenticated_user.id)
+                .execute('unlike_post_proc');
+
+            return res.status(200).json({
+                message: 'Post unliked successfully',
+            });
+        }
+
+        // like the post
+        const likePost = await pool.request()
+            .input('id', mssql.VarChar, v4())
+            .input('post_id', mssql.VarChar, id)
+            .input('user_id', mssql.VarChar, authenticated_user.id)
+            .execute('like_post_proc');
+
+        return res.status(200).json({
+            message: 'Post liked successfully',
+        });
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+}
+
+
 // Getting Comments By Post Id
 const getCommentsByPostId = async (req, res) => {
     try {
@@ -226,69 +328,13 @@ const getCommentsByPostId = async (req, res) => {
     }
 }
 
-// creating post category
-const createPostCategoryController = async (req, res) => {
-    try {
-
-        const {name} = req.body;
-
-        if (!name) {
-            return res.status(400).json({
-                message: 'Name is required'
-            });
-        }
-
-        const pool = await mssql.connect(sqlConfig);
-
-        // checking if the category exist
-        const category = await pool.request()
-            .input('name', mssql.VarChar, name)
-            .execute('get_category_by_name_proc');
-
-        if (category.recordset.length > 0) {
-            return res.status(400).json({
-                message: 'Category already exist'
-            });
-        }
-
-        // creating the category
-        const newCategory = await pool.request()
-            .input('id', mssql.VarChar, v4())
-            .input('name', mssql.VarChar, name)
-            .execute('create_post_category_proc');
-
-        return res.status(200).json({
-            message: 'Category created successfully',
-        });
-    } catch (error) {
-        return res.status(500).json({
-            error: error.message
-        });
-    }
-}
-
-const getAllPostCategories = async (req, res) => {
-    try {
-        const pool = await mssql.connect(sqlConfig);
-        const categories = await pool.request()
-            .execute('get_all_post_categories_proc');
-        return res.status(200).json({
-            categories: categories.recordset
-        });
-    } catch (error) {
-        return res.status(500).json({
-            error: error.message
-        });
-    }
-}
-
 
 module.exports = {
     createPostController,
     getAllPostsController,
-    createPostCategoryController,
     getCommentsByPostId,
-    getAllPostCategories,
     getPostDetailsController,
-    updatePostController
+    updatePostController,
+    deletePostController,
+    likeUnlikePostController
 }

@@ -39,6 +39,7 @@ CREATE TABLE posts (
     picture VARCHAR(255),
     content NVARCHAR(MAX) NOT NULL,
     category_id VARCHAR(255) NOT NULL,
+    is_deleted BIT DEFAULT 0,
     post_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME,
     FOREIGN KEY (user_id) REFERENCES users(id)
@@ -65,6 +66,7 @@ CREATE TABLE post_comments (
     user_id VARCHAR(255) NOT NULL,
     post_id VARCHAR(255) NOT NULL,
     content VARCHAR(500) NOT NULL,
+    is_deleted BIT DEFAULT 0,
     comment_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME,
     FOREIGN KEY (user_id) REFERENCES users(id),
@@ -92,6 +94,7 @@ CREATE TABLE comment_replies (
     user_id VARCHAR(255) NOT NULL,
     comment_id VARCHAR(255) NOT NULL,
     content VARCHAR(255) NOT NULL,
+    is_deleted BIT DEFAULT 0,
     reply_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME,
     FOREIGN KEY (user_id) REFERENCES users(id),

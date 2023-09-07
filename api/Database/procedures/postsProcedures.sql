@@ -26,7 +26,7 @@ CREATE OR ALTER PROCEDURE update_post_proc(
 AS
 BEGIN
     UPDATE posts
-    SET picture = @picture, content = @content, category_id = @category_id
+    SET picture = @picture, content = @content, category_id = @category_id, updated_at = CURRENT_TIMESTAMP
     WHERE id = @id;
 END;
 GO
@@ -36,6 +36,14 @@ CREATE OR ALTER PROCEDURE get_all_posts_proc
 AS
 BEGIN
     SELECT * FROM posts;
+END;
+GO
+
+-- procedure: get active posts
+CREATE OR ALTER PROCEDURE get_active_posts_proc
+AS
+BEGIN
+    SELECT * FROM posts WHERE is_deleted = 0;
 END;
 GO
 
@@ -49,6 +57,21 @@ BEGIN
 END;
 GO
 
+-- procedure: soft_delete_post
+CREATE OR ALTER PROCEDURE soft_delete_post_proc(
+    @id VARCHAR(255)
+)
+AS
+BEGIN
+    UPDATE posts
+    SET is_deleted = 1, updated_at = CURRENT_TIMESTAMP
+    WHERE id = @id;
+END;
+GO
+
+
+
+-- CATEGORY PROCEDURES
 -- procedure: create post_category
 CREATE OR ALTER PROCEDURE create_post_category_proc(
     @id VARCHAR(255),
@@ -58,6 +81,19 @@ AS
 BEGIN
     INSERT INTO post_category (id, name)
     VALUES (@id, @name);
+END;
+GO
+
+-- procedure: update post_category
+CREATE OR ALTER PROCEDURE update_post_category_proc(
+    @id VARCHAR(255),
+    @name VARCHAR(255)
+)
+AS
+BEGIN
+    UPDATE post_category
+    SET name = @name, updated_at = CURRENT_TIMESTAMP
+    WHERE id = @id;
 END;
 GO
 
@@ -97,6 +133,17 @@ BEGIN
 END;
 GO
 
+-- procedure: delete post_category
+CREATE OR ALTER PROCEDURE delete_post_category_proc(
+    @id VARCHAR(255)
+)
+AS
+BEGIN
+    DELETE FROM post_category WHERE id = @id;
+END;
+GO
+
+-- COMMENTS PROCEDURES
 -- procedure: get_post_comments
 CREATE OR ALTER PROCEDURE get_post_comments_proc(
     @post_id VARCHAR(255)
@@ -107,15 +154,7 @@ BEGIN
 END;
 GO
 
--- procedure: get_post_likes
-CREATE OR ALTER PROCEDURE get_post_likes_proc(
-    @post_id VARCHAR(255)
-)
-AS
-BEGIN
-    SELECT * FROM post_likes WHERE post_id = @post_id;
-END;
-GO
+
 
 -- procedure: get_comment_replies
 CREATE OR ALTER PROCEDURE get_comment_replies_proc(
@@ -127,6 +166,65 @@ BEGIN
 END;
 GO
 
+
+-- LIKES PROCEDURES
+-- procedure: get_post_likes
+CREATE OR ALTER PROCEDURE get_post_likes_proc(
+    @post_id VARCHAR(255)
+)
+AS
+BEGIN
+    SELECT * FROM post_likes WHERE post_id = @post_id;
+END;
+GO
+
+-- procedure: get_post_likes_by_user (get likes by user)
+CREATE OR ALTER PROCEDURE get_post_likes_by_user_proc(
+    @user_id VARCHAR(255)
+)
+AS
+BEGIN
+    SELECT * FROM post_likes WHERE user_id = @user_id;
+END;
+GO
+
+-- procedure: if_user_liked_post
+CREATE OR ALTER PROCEDURE if_user_liked_post_proc(
+    @user_id VARCHAR(255),
+    @post_id VARCHAR(255)
+)
+AS
+BEGIN
+    SELECT * FROM post_likes WHERE user_id = @user_id AND post_id = @post_id;
+END;
+GO
+
+-- procedure: like post
+CREATE OR ALTER PROCEDURE like_post_proc(
+    @id VARCHAR(255),
+    @user_id VARCHAR(255),
+    @post_id VARCHAR(255)
+)
+AS
+BEGIN
+    INSERT INTO post_likes (id, user_id, post_id)
+    VALUES (@id, @user_id, @post_id);
+END;
+GO
+
+-- procedure: unlike post
+CREATE OR ALTER PROCEDURE unlike_post_proc(
+    @user_id VARCHAR(255),
+    @post_id VARCHAR(255)
+)
+AS
+BEGIN
+    DELETE FROM post_likes WHERE user_id = @user_id AND post_id = @post_id;
+END;
+GO
+
+
+
 -- procedure: get_comment_likes
 CREATE OR ALTER PROCEDURE get_comment_likes_proc(
     @comment_id VARCHAR(255)
@@ -136,4 +234,13 @@ BEGIN
     SELECT * FROM comment_likes WHERE comment_id = @comment_id;
 END;
 GO
+
+-- procedure: get_reply_likes
+CREATE OR ALTER PROCEDURE get_reply_likes_proc(
+    @reply_id VARCHAR(255)
+)
+AS
+BEGIN
+    SELECT * FROM reply_likes WHERE reply_id = @reply_id;
+END;
 
