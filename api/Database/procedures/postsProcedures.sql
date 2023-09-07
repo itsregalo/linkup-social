@@ -1,8 +1,6 @@
 USE linkup_social_db;
 GO
 
-
-
 -- procedure: create_post
 CREATE OR ALTER PROCEDURE create_post_proc(
     @id VARCHAR(255),
@@ -15,6 +13,21 @@ AS
 BEGIN
     INSERT INTO posts (id, user_id, picture, content, category_id)
     VALUES (@id, @user_id, @picture, @content, @category_id);
+END;
+GO
+
+-- procedure: update_post
+CREATE OR ALTER PROCEDURE update_post_proc(
+    @id VARCHAR(255),
+    @picture VARCHAR(255),
+    @content NVARCHAR(MAX),
+    @category_id VARCHAR(255)
+)
+AS
+BEGIN
+    UPDATE posts
+    SET picture = @picture, content = @content, category_id = @category_id
+    WHERE id = @id;
 END;
 GO
 
@@ -48,6 +61,14 @@ BEGIN
 END;
 GO
 
+-- procedure: get_all_post_categories
+CREATE OR ALTER PROCEDURE get_all_post_categories_proc
+AS
+BEGIN
+    SELECT * FROM post_category;
+END;
+GO
+
 -- procedure: get category by name
 CREATE OR ALTER PROCEDURE get_category_by_name_proc(
     @name VARCHAR(255)
@@ -55,6 +76,24 @@ CREATE OR ALTER PROCEDURE get_category_by_name_proc(
 AS
 BEGIN
     SELECT * FROM post_category WHERE name = @name;
+END;
+GO
+
+-- procedure: get category by id
+CREATE OR ALTER PROCEDURE get_category_by_id_proc(
+    @id VARCHAR(255)
+)
+AS
+BEGIN
+    SELECT * FROM post_category WHERE id = @id;
+END;
+GO
+
+-- procedure: get default category
+CREATE OR ALTER PROCEDURE get_default_category_proc
+AS
+BEGIN
+    SELECT * FROM post_category WHERE name = 'General';
 END;
 GO
 

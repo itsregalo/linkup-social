@@ -1,7 +1,7 @@
 USE linkup_social_db;
 
 -- Table: posts
-DROP TABLE IF EXISTS posts;
+DROP TABLE IF EXISTS post_category;
 
 CREATE TABLE post_category (
     id VARCHAR(255) NOT NULL PRIMARY KEY,
@@ -10,7 +10,7 @@ CREATE TABLE post_category (
     updated_at DATETIME
 );
 
-DROP TABLE IF EXISTS posts;
+DROP TABLE IF EXISTS tags;
 
 CREATE TABLE tags (
     id VARCHAR(255) NOT NULL PRIMARY KEY,
@@ -139,4 +139,4 @@ CREATE TABLE following (
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (following_id) REFERENCES users(id)
 );
-GO
+
