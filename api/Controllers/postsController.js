@@ -26,7 +26,24 @@ const getAllPostsController = async (req, res) => {
 // Get User Posts
 const getUserPostsController = async (req, res) => {
     try {
-        
+        const {id} = req.params;
+        const pool = await mssql.connect(sqlConfig);
+
+        // checking if the user exists
+        const user = await pool.request()
+            .input('id', mssql.VarChar, id)
+            .execute('get_user_by_id_proc');
+
+        if (user.recordset.length === 0) {
+            return res.status(404).json({
+                message: 'User not found'
+            });
+        }
+
+        // getting the user posts
+        const posts = await pool.request()
+            
+
     } catch (error) {
         return res.status(500).json({
             error: error.message

@@ -47,7 +47,15 @@ const getUserFollowingProcedure = async (req, res) => {
 
 const followUnfollowUserProcedure = async (req, res) => {
     try {
-        
+        const authenticated_user = req.user;
+        const {user_id} = req.params;
+
+        const pool = await mssql.connect(sqlConfig);
+
+        // check if user exists
+        const user = await pool.request()
+            .input('user_id', mssql.VarChar(50), user_id)
+            .execute('get_user_by_id_proc');
     } catch (error) {
         
     }
