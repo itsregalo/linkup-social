@@ -210,6 +210,49 @@ const updateUserProfileController = async (req, res) => {
     }
 }
 
+// controller to get user by id
+const getUserProfileController = async (req, res) => {
+    try {
+        const {id} = req.params;
+
+        // checking if the user exists
+        const pool = await mssql.connect(sqlConfig);
+        const user = await pool.request()
+            .input('id', mssql.VarChar, id)
+            .execute('get_user_by_id_proc');
+
+        if(user.recordset.length === 0) {
+            return res.status(400).json({
+                message: "User does not exist"
+            });
+        }
+
+        // getting user followers
+        const user_followers = await pool.request()
+            .input('user_id', mssql.VarChar(50), id)
+            .execute('getUserFollowersProcedure');
+
+        // getting user following
+        const user_following = await pool.request()
+            .input('user_id', mssql.VarChar(50), id)
+            .execute('getUserFollowingProcedure');
+
+        // getting user posts
+        const user_posts = await pool.request()
+            .input('user_id', mssql.VarChar(50), id)
+            .execute('get_user_posts_proc');
+
+        return res.status(200).json({
+            user: user.recordset[0]
+        });
+
+        // checking if the user is authenticated
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+}
 
 // controller for getting all users
 const adminGetAllUsersController = async (req, res) => {

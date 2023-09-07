@@ -23,6 +23,17 @@ const getAllPostsController = async (req, res) => {
     }
 }
 
+// Get User Posts
+const getUserPostsController = async (req, res) => {
+    try {
+        
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+}
+
 
 // Post Details Controller (By Id)
 const getPostDetailsController = async (req, res) => {
