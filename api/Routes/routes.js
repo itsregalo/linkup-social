@@ -48,4 +48,6 @@ router.put('/posts/:id/comment/reply', verifyToken, updateCommentReplyController
 router.delete('/posts/:id/comment/reply', verifyToken, deleteCommentReplyController)
 
 
+// follow following
+
 module.exports = router;
