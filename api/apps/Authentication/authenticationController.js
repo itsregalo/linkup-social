@@ -3,9 +3,9 @@ const bcrypt = require('bcrypt'); // for hashing passwords
 const jwt = require('jsonwebtoken'); // for generating JWTs
 const {v4} = require('uuid'); // for generating UUIDs
 const nodemailer = require('nodemailer'); // for sending emails
-const sqlConfig = require('../Config/Config');
-const { userRegistrationValidator, userUpdateValidateor, forgotPasswordValidator } = require('../Validators/AuthenticationValidators');
-const emailConfigs = require('../Config/EmailConfig');
+const sqlConfig = require('../../Config/Config');
+const { userRegistrationValidator, userUpdateValidateor, forgotPasswordValidator } = require('../../Validators/AuthenticationValidators');
+const emailConfigs = require('../../Config/EmailConfig');
 
 const userRegistrationController = async (req, res) => {
     try {
