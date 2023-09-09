@@ -2,8 +2,10 @@ const mssql = require('mssql');
 const bcrypt = require('bcrypt'); // for hashing passwords
 const jwt = require('jsonwebtoken'); // for generating JWTs
 const {v4} = require('uuid'); // for generating UUIDs
+const nodemailer = require('nodemailer'); // for sending emails
 const sqlConfig = require('../Config/Config');
-const { userRegistrationValidator, userUpdateValidateor } = require('../Validators/AuthenticationValidators');
+const { userRegistrationValidator, userUpdateValidateor, forgotPasswordValidator } = require('../Validators/AuthenticationValidators');
+const emailConfigs = require('../Config/EmailConfig');
 
 const userRegistrationController = async (req, res) => {
     try {
@@ -46,7 +48,7 @@ const userRegistrationController = async (req, res) => {
         }
 
         // hashing the password
-        const salt = await bcrypt.genSalt(10);
+        const salt = await bcrypt.genSalt(10); // generating a salt 
         const hashedPassword = await bcrypt.hash(password, salt);
 
         const new_user_id = v4();
@@ -121,7 +123,7 @@ const loginUser = async (req, res) => {
         const token = jwt.sign(
             {id: user.recordset[0].id},
             process.env.TOKEN_SECRET,
-            {expiresIn: '1h'}
+            {expiresIn: '2h'}
         );
 
         return res.status(200).json({
@@ -141,24 +143,32 @@ const loginUser = async (req, res) => {
     }
 }
 
-// update user profile controller
-const updateUserProfileController = async (req, res) => {
+const forgotPasswordController = async (req, res) => {
     try {
-        const authenticated_user = req.user;
-        const {id} = req.params;
+        const {email} = req.body;
 
-        // checking if the user is authenticated
-        if(authenticated_user.id !== id) {
-            return res.status(403).json({
-                message: "Access denied"
+        // validating the email
+        if(!email) {
+            return res.status(400).json({
+                message: "Email is required"
             });
         }
-        
-        // checking if the user exists
+
+        const {error} = forgotPasswordValidator.validate(req.body);
+
+        if(error) {
+            return res.status(400).json({
+                error: error.details[0].message
+            });
+        }
+
+        // creating a pool
         const pool = await mssql.connect(sqlConfig);
+
+        // checking if the user exists
         const user = await pool.request()
-            .input('id', mssql.VarChar, authenticated_user.id)
-            .execute('get_user_by_id_proc');
+            .input('email', mssql.VarChar, email)
+            .execute('get_user_by_email_proc');
 
         if(user.recordset.length === 0) {
             return res.status(400).json({
@@ -166,41 +176,54 @@ const updateUserProfileController = async (req, res) => {
             });
         }
 
-        const {username, full_name, location, bio, profile_picture, background_picture} = req.body;
+        // generating a JWT
+        const token = jwt.sign(
+            {id: user.recordset[0].id},
+            process.env.TOKEN_SECRET,
+            {expiresIn: '20m'}
+        );
 
-        // checking if the fields are empty
-        const {error} = userUpdateValidateor.validate(req.body);
+        // sending the email
+        const transporter = nodemailer.createTransport({
+            host: emailConfigs.host,
+            service : emailConfigs.service,
+            port: emailConfigs.port,
+            secure: false,
+            auth: {
+                user: process.env.EMAIL,
+                pass: process.env.EMAIL_PASSWORD
+            },
+            
+        tls: {
+            rejectUnauthorized: false
+        }
+        });
 
-        if (error) {
-            return res.status(400).json({
-                error: error.details[0].message
-            })
+
+        const mailOptions = {
+            from: process.env.EMAIL,
+            to: email,
+            subject: 'Reset password',
+            html: `
+                <h2>Click on the link below to reset your password</h2>
+                <p>
+                <button>
+                    <a href="${process.env.CLIENT_URL}/reset-password/${token}">Reset password</a>
+                </button>
+                </p>
+            `
         }
 
-        // checking if the username is already taken
-        const username_taken = await pool.request()
-            .input('username', mssql.VarChar, username)
-            .execute('get_user_by_username_proc');
-
-        if(username_taken.recordset.length > 0) {
-            return res.status(400).json({
-                message: "Username is already taken"
-            });
-        }
-
-        // updating the user
-        const updated_user = await pool.request()
-            .input('id', mssql.VarChar, authenticated_user.id)
-            .input('username', mssql.VarChar, username)
-            .input('full_name', mssql.VarChar, full_name)
-            .input('location', mssql.VarChar, location)
-            .input('bio', mssql.VarChar, bio)
-            .input('profile_picture', mssql.VarChar, profile_picture)
-            .input('background_picture', mssql.VarChar, background_picture)
-            .execute('update_user_profile_proc');
-
-        return res.status(200).json({
-            message: "User profile updated successfully"
+        transporter.sendMail(mailOptions, (error, info) => {
+            if(error) {
+                return res.status(400).json({
+                    message: error.message
+                });
+            } else {
+                return res.status(200).json({
+                    message: "Email sent successfully"
+                });
+            }
         });
 
     } catch (error) {
@@ -210,43 +233,53 @@ const updateUserProfileController = async (req, res) => {
     }
 }
 
-// controller to get user by id
-const getUserProfileController = async (req, res) => {
+// reset password controller
+const resetPasswordController = async (req, res) => {
     try {
-        const {id} = req.params;
+        const {resetToken, newPassword, repeatNewPassword} = req.body;
 
-        // checking if the user exists
-        const pool = await mssql.connect(sqlConfig);
-        const user = await pool.request()
-            .input('id', mssql.VarChar, id)
-            .execute('get_user_by_id_proc');
-
-        if(user.recordset.length === 0) {
+        // validating the email
+        if(!(resetToken && newPassword && repeatNewPassword)) {
             return res.status(400).json({
-                message: "User does not exist"
+                message: "All fields are required"
             });
         }
 
-        // getting user followers
-        const user_followers = await pool.request()
-            .input('user_id', mssql.VarChar(50), id)
-            .execute('getUserFollowersProcedure');
+        // checking if the passwords match
+        if(newPassword !== repeatNewPassword) {
+            return res.status(400).json({
+                message: "Passwords do not match"
+            });
+        }
 
-        // getting user following
-        const user_following = await pool.request()
-            .input('user_id', mssql.VarChar(50), id)
-            .execute('getUserFollowingProcedure');
+        // creating a pool
+        const pool = await mssql.connect(sqlConfig);
 
-        // getting user posts
-        const user_posts = await pool.request()
-            .input('user_id', mssql.VarChar(50), id)
-            .execute('get_user_posts_proc');
+        // checking if the user exists
+        const user = await pool.request()
+            .input('resetToken', mssql.VarChar, resetToken)
+            .execute('get_user_by_reset_token_proc');
+
+        if(user.recordset.length === 0) {
+            return res.status(400).json({
+                message: "Invalid token"
+            });
+        }
+
+        // hashing the password
+        const salt = await bcrypt.genSalt(10); // generating a salt
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+        // updating the password
+        const updatedUser = await pool.request()
+            .input('id', mssql.VarChar, user.recordset[0].id)
+            .input('password', mssql.VarChar, hashedPassword)
+            .execute('update_user_password_proc');
 
         return res.status(200).json({
-            user: user.recordset[0]
+            message: "Password updated successfully"
         });
 
-        // checking if the user is authenticated
     } catch (error) {
         return res.status(500).json({
             error: error.message
@@ -274,6 +307,7 @@ const adminGetAllUsersController = async (req, res) => {
 module.exports = {
     userRegistrationController,
     loginUser,
-    updateUserProfileController,
-    adminGetAllUsersController
+    adminGetAllUsersController,
+    forgotPasswordController,
+    resetPasswordController
 }

@@ -1,5 +1,5 @@
 const {Router} = require('express');
-const { userRegistrationController, adminGetAllUsersController, loginUser, updateUserProfileController } = require('../Controllers/authenticationController');
+const { userRegistrationController, adminGetAllUsersController, loginUser, forgotPasswordController, resetPasswordController } = require('../Controllers/authenticationController');
 const { verifyToken } = require('../middleware/verifyToken');
 const { 
     getAllPostsController, createPostController, getPostDetailsController,
@@ -9,13 +9,16 @@ const {
 } = require('../Controllers/postsController');
 
 const { getAllPostCategories, createPostCategoryController, updateCategoryController, deleteCategoryController } = require('../Controllers/categoriesController');
+const { getUserFollowersProcedure, getUserFollowingProcedure, followUnfollowUserProcedure, getUsersNotFollowingProcedure } = require('../Controllers/followersController');
+const { updateUserProfileController, getUserProfileController } = require('../Controllers/profileController');
 
 const router = Router();
 
 // Authentication
 router.post('/register', userRegistrationController);
 router.post('/login', loginUser);
-router.put('/auth/update/profile/:id', verifyToken, updateUserProfileController);
+router.post('/auth/forgot-password', forgotPasswordController);
+router.post('/reset-password', resetPasswordController);
 router.get('/admin/users/all', adminGetAllUsersController)
 
 // post category
@@ -47,7 +50,14 @@ router.post('/posts/:id/comment/reply', verifyToken, createCommentReplyControlle
 router.put('/posts/:id/comment/reply', verifyToken, updateCommentReplyController)
 router.delete('/posts/:id/comment/reply', verifyToken, deleteCommentReplyController)
 
-
 // follow following
+router.get('/user/:id/followers', verifyToken, getUserFollowersProcedure)
+router.get('/user/:id/following', verifyToken, getUserFollowingProcedure)
+router.post('/user/:user_id/follow', verifyToken, followUnfollowUserProcedure)
+router.get('/user/profiles/not-following', verifyToken, getUsersNotFollowingProcedure)
+
+// user profile
+router.get('/user/profile/:id', verifyToken, getUserProfileController);
+router.put('/auth/update/profile/:id', verifyToken, updateUserProfileController);
 
 module.exports = router;

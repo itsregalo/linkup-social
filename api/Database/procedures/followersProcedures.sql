@@ -31,6 +31,16 @@ BEGIN
 END;
 GO
 
+-- Procedure: check is followed
+CREATE OR ALTER PROCEDURE check_is_followed_proc
+    @user_id VARCHAR(255),
+    @follower_id VARCHAR(255)
+AS
+BEGIN
+    SELECT * FROM followers WHERE user_id = @user_id AND follower_id = @follower_id;
+END;
+GO
+
 -- Procedure: unfollow user
 CREATE OR ALTER PROCEDURE unfollow_user_proc
     @user_id VARCHAR(255),
@@ -38,5 +48,15 @@ CREATE OR ALTER PROCEDURE unfollow_user_proc
 AS
 BEGIN
     DELETE FROM followers WHERE user_id = @user_id AND follower_id = @follower_id;
+END;
+GO
+
+-- procedure: get users not foollowing
+CREATE OR ALTER PROCEDURE get_users_not_following_proc
+    @user_id VARCHAR(255)
+AS
+BEGIN
+    SELECT * FROM users WHERE id NOT IN (
+        SELECT following_id FROM following WHERE user_id = @user_id);
 END;
 GO

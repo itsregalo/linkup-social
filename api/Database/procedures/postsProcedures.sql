@@ -69,6 +69,15 @@ BEGIN
 END;
 GO
 
+-- procedure: get user posts
+CREATE OR ALTER PROCEDURE get_user_posts_proc(
+    @user_id VARCHAR(255)
+)
+AS
+BEGIN
+    SELECT * FROM posts WHERE user_id = @user_id;
+END;
+GO
 
 
 -- CATEGORY PROCEDURES

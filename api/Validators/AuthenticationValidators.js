@@ -51,7 +51,15 @@ const userUpdateValidateor = joi.object({
 
 });
 
+const forgotPasswordValidator = joi.object({
+    email: joi.string().email().required().messages({
+        'string.email': 'Email must be a valid email',
+        'string.empty': 'Email is required'
+    })
+});
+
 module.exports = {
     userRegistrationValidator,
-    userUpdateValidateor
+    userUpdateValidateor,
+    forgotPasswordValidator
 }

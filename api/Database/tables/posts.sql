@@ -45,6 +45,7 @@ CREATE TABLE posts (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+
 -- Table: post_user_tags
 DROP TABLE IF EXISTS post_users_tagged;
 

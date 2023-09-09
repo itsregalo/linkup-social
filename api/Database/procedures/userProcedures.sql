@@ -82,6 +82,17 @@ BEGIN
 END;
 GO
 
+--Procedure to update user password
+CREATE OR ALTER PROCEDURE update_user_password_proc(
+    @id VARCHAR(255),
+    @password VARCHAR(255)
+)
+AS
+BEGIN
+    UPDATE users SET password = @password WHERE id = @id;
+END;
+GO
+
 -- update user prfile
 CREATE OR ALTER PROCEDURE update_user_profile_proc(
     @id VARCHAR(255),
