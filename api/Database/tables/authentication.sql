@@ -10,3 +10,4 @@ CREATE TABLE user_reset_tokens (
     updated_at DATETIME,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
