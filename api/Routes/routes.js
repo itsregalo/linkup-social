@@ -1,10 +1,26 @@
 const {Router} = require('express');
-const { userRegistrationController } = require('../Controllers/authenticationController');
 
 const router = Router();
 
-// Authentication
-router.post('/register', userRegistrationController);
+// post category
+
+
+// posts
+
+
+// posts likes
+
+
+// posts comments
+
+
+// comments replies
+
+
+// follow following
+
+
+// user profile
 
 
 module.exports = router;

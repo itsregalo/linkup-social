@@ -1,3 +1,11 @@
+-- KILL ALL CONNECTIONS TO THE DATABASE
+-- This is necessary to drop the database
+
+-- USE master;
+
+-- ALTER DATABASE linkup_social_db SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+
+
 DROP DATABASE IF EXISTS linkup_social_db;
 
 CREATE DATABASE linkup_social_db;
@@ -23,6 +31,26 @@ CREATE TABLE users (
 );
 
 -- Table: posts
+DROP TABLE IF EXISTS post_category;
+
+CREATE TABLE post_category (
+    id VARCHAR(255) NOT NULL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME
+);
+
+DROP TABLE IF EXISTS tags;
+
+CREATE TABLE tags (
+    id VARCHAR(255) NOT NULL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME
+);
+
+-- Table: posts
+
 DROP TABLE IF EXISTS posts;
 
 CREATE TABLE posts (
@@ -30,9 +58,35 @@ CREATE TABLE posts (
     user_id VARCHAR(255) NOT NULL,
     picture VARCHAR(255),
     content NVARCHAR(MAX) NOT NULL,
+    category_id VARCHAR(255) NOT NULL,
     post_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME,
     FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+DROP TABLE IF EXISTS post_tags;
+
+CREATE TABLE post_tags (
+    id VARCHAR(255) NOT NULL PRIMARY KEY,
+    post_id VARCHAR(255) NOT NULL,
+    tag_id VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME,
+    FOREIGN KEY (post_id) REFERENCES posts(id),
+    FOREIGN KEY (tag_id) REFERENCES tags(id)
+);
+
+-- Table: post_user_tags
+DROP TABLE IF EXISTS post_users_tagged;
+
+CREATE TABLE post_users_tagged (
+    id VARCHAR(255) NOT NULL PRIMARY KEY,
+    user_id VARCHAR(255) NOT NULL,
+    post_id VARCHAR(255) NOT NULL,
+    tag_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (post_id) REFERENCES posts(id)
 );
 
 -- Table: comments
@@ -117,3 +171,4 @@ CREATE TABLE following (
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (following_id) REFERENCES users(id)
 );
+

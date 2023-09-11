@@ -1,5 +1,6 @@
 USE linkup_social_db;
 
+DROP TABLE IF EXISTS users;
 -- Table: users
 CREATE TABLE users (
     id VARCHAR(255) NOT NULL PRIMARY KEY,
@@ -14,3 +15,4 @@ CREATE TABLE users (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 GO
+
