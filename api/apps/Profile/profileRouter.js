@@ -6,7 +6,7 @@ const profileRouter = Router();
 
 profileRouter.get('/profile/:id', verifyToken, getUserProfileController);
 profileRouter.put('/auth/update/profile/:id', verifyToken, updateUserProfileController);
-profileRouter.put('/auth/update/profile/picture/:id', verifyToken, updateProfilePicController);
-profileRouter.put('/auth/update/profile/cover/:id', verifyToken, updateBackgroundPictureController);
+profileRouter.put('/update/profile/picture/:id', verifyToken, updateProfilePicController);
+profileRouter.put('/update/profile/cover/:id', verifyToken, updateBackgroundPictureController);
 
 module.exports = profileRouter;
