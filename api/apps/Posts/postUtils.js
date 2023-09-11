@@ -1,5 +1,6 @@
 const mssql = require('mssql');
 const sqlConfig = require('../../Config/Config');
+const { v4 } = require('uuid');
 
 const getTaggedUsers = (text) => {
     const regex = /@([a-z0-9_-]+)/gi;
@@ -45,9 +46,10 @@ const addTaggedUsers = async (post_id, tagged_users) => {
 
             // add tagged user
             await pool.request()
+                .input('id', mssql.VarChar(50), v4())
                 .input('user_id', mssql.VarChar(50), user.recordset[0].id)
                 .input('post_id', mssql.VarChar(50), post_id)
-                .execute('add_tagged_user_proc');
+                .execute('add_post_users_tagged');
         }
     }
     catch (error) {

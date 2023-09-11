@@ -69,6 +69,16 @@ BEGIN
 END;
 GO
 
+-- procedure: delete_post (hard delete)
+CREATE OR ALTER PROCEDURE hard_delete_post_proc(
+    @id VARCHAR(255)
+)
+AS
+BEGIN
+    DELETE FROM posts WHERE id = @id;
+END;
+GO
+
 -- procedure: get user posts
 CREATE OR ALTER PROCEDURE get_user_posts_proc(
     @user_id VARCHAR(255)
@@ -81,11 +91,12 @@ GO
 
 -- user tags
 CREATE OR ALTER PROCEDURE add_post_users_tagged
-    @post_id VARCHAR(255),
-    @user_id VARCHAR(255)
+    @id VARCHAR(255),
+    @user_id VARCHAR(255),
+    @post_id VARCHAR(255)
 AS
 BEGIN
-    INSERT INTO post_users_tagged (id, user_id, post_id) VALUES (NEWID(), @user_id, @post_id);
+    INSERT INTO post_users_tagged (id, user_id, post_id) VALUES (@id, @user_id, @post_id);
 END;
 GO
 
@@ -116,4 +127,18 @@ BEGIN
         SELECT post_id FROM post_users_tagged WHERE user_id = @user_id
         );
 END;
+GO
+
+USE linkup_social_db;
+GO
+
+-- Procedure to check if a user is tagged in a post
+CREATE OR ALTER PROCEDURE check_user_tagged_in_post
+    @user_id VARCHAR(255),
+    @post_id VARCHAR(255)
+AS
+BEGIN
+    SELECT * FROM post_users_tagged WHERE user_id = @user_id AND post_id = @post_id;
+END;
+GO
 

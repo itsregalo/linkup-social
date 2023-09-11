@@ -16,6 +16,39 @@ BEGIN
 END;
 GO
 
+-- Procedure: get_all_details_by_id
+CREATE OR ALTER PROCEDURE get_all_details_by_id_proc(
+    @id VARCHAR(255)
+)
+AS
+BEGIN
+    SELECT *
+    FROM users WHERE id = @id;
+END;
+GO
+
+-- Procedure: get_all_details_by_username
+CREATE OR ALTER PROCEDURE get_all_details_by_username_proc(
+    @username VARCHAR(255)
+)
+AS
+BEGIN
+    SELECT *
+    FROM users WHERE username = @username;
+END;
+GO
+
+-- Procedure: get_all_details_by_email
+CREATE OR ALTER PROCEDURE get_all_details_by_email_proc(
+    @email VARCHAR(255)
+)
+AS
+BEGIN
+    SELECT *
+    FROM users WHERE email = @email;
+END;
+GO
+
 CREATE OR ALTER PROCEDURE create_user_proc(
     @id VARCHAR(255),
     @username VARCHAR(255),
@@ -40,7 +73,8 @@ CREATE OR ALTER PROCEDURE get_user_by_id_proc(
 )
 AS
 BEGIN
-    SELECT * FROM users WHERE id = @id;
+    SELECT id, username, email, full_name, location, bio, profile_picture, background_picture, created_at
+    FROM users WHERE id = @id;
 END;
 GO
 
@@ -50,7 +84,8 @@ CREATE OR ALTER PROCEDURE get_user_by_username_proc(
 )
 AS
 BEGIN
-    SELECT * FROM users WHERE username = @username;
+    SELECT id, username, email, full_name, location, bio, profile_picture, background_picture, created_at
+    FROM users WHERE username = @username;
 END;
 GO
 
@@ -60,7 +95,8 @@ CREATE OR ALTER PROCEDURE get_user_by_email_proc(
 )
 AS
 BEGIN
-    SELECT * FROM users WHERE email = @email;
+    SELECT id, username, email, full_name, location, bio, profile_picture, background_picture, created_at
+    FROM users WHERE email = @email;
 END;
 GO
 
@@ -71,14 +107,16 @@ CREATE OR ALTER PROCEDURE get_user_by_username_or_email_proc(
 )
 AS
 BEGIN
-    SELECT * FROM users WHERE username = @username OR email = @email;
+    SELECT id, username, email, full_name, location, bio, profile_picture, background_picture, created_at
+    FROM users WHERE username = @username OR email = @email;
 END;
 GO
 -- get all users procedure
 CREATE OR ALTER PROCEDURE get_all_users_proc
 AS
 BEGIN
-    SELECT * FROM users;
+    SELECT id, username, email, full_name, location, bio, profile_picture, background_picture, created_at
+    FROM users;
 END;
 GO
 
@@ -107,5 +145,15 @@ CREATE OR ALTER PROCEDURE update_user_profile_proc(
 AS
 BEGIN
     UPDATE users SET username = @username, full_name = @full_name, location = @location, bio = @bio, profile_picture = @profile_picture, background_picture = @background_picture WHERE id = @id;
+END;
+GO
+
+-- Procedure: delete_user
+CREATE OR ALTER PROCEDURE delete_user_proc(
+    @id VARCHAR(255)
+)
+AS
+BEGIN
+    DELETE FROM users WHERE id = @id;
 END;
 GO

@@ -68,6 +68,56 @@ const userRegistrationController = async (req, res) => {
             {expiresIn: '1h'}
         );
 
+        // sending the email
+        try{
+            const transporter = nodemailer.createTransport({
+                host: emailConfigs.host,
+                service : emailConfigs.service,
+                port: emailConfigs.port,
+                secure: false,
+                auth: {
+                    user: process.env.EMAIL,
+                    pass: process.env.EMAIL_PASSWORD
+                },
+                
+            tls: {
+                rejectUnauthorized: false
+            }
+            });
+    
+            // sending the email
+            const mailOptions = {
+                from: process.env.EMAIL,
+                to: email,
+                subject: 'Account activation',
+                html: `
+                    <h2>Click on the link below to activate your account</h2>
+                    <p>
+                    <button>
+                        <a href="${process.env.CLIENT_URL}/activate/${token}">Activate account</a>
+                    </button>
+                    </p>
+                `
+            }
+    
+            transporter.sendMail(mailOptions, (error, info) => {
+                if(error) {
+                    return res.status(400).json({
+                        message: error.message
+                    });
+                } else {
+                    return res.status(200).json({
+                        message: "Email sent successfully"
+                    });
+                }
+            }
+            );
+        } catch (error) {
+            return res.status(400).json({
+                message: error.message
+            });
+        }
+
         return res.status(200).json({
             token,
             user: {
@@ -103,7 +153,7 @@ const loginUser = async (req, res) => {
         // checking if the user already exists
         const user = await pool.request()
             .input('email', mssql.VarChar, email)
-            .execute('get_user_by_email_proc');
+            .execute('get_all_details_by_email_proc');
 
         if(user.recordset.length === 0) {
             return res.status(400).json({
@@ -123,7 +173,7 @@ const loginUser = async (req, res) => {
         const token = jwt.sign(
             {id: user.recordset[0].id},
             process.env.TOKEN_SECRET,
-            {expiresIn: '2h'}
+            {expiresIn: '1h'}
         );
 
         return res.status(200).json({
@@ -168,7 +218,7 @@ const forgotPasswordController = async (req, res) => {
         // checking if the user exists
         const user = await pool.request()
             .input('email', mssql.VarChar, email)
-            .execute('get_user_by_email_proc');
+            .execute('get_all_details_by_email_proc');
 
         if(user.recordset.length === 0) {
             return res.status(400).json({
@@ -303,11 +353,46 @@ const adminGetAllUsersController = async (req, res) => {
     }
 }
 
+// deleting a user
+const deleteUserControllerHard = async (req, res) => {
+    try {
+        const {id} = req.params;
+
+        // creating a pool
+        const pool = await mssql.connect(sqlConfig);
+
+        //checking if the user exists
+        const user = await pool.request()
+            .input('id', mssql.VarChar, id)
+            .execute('get_user_by_id_proc');
+        
+        if(user.recordset.length === 0) {
+            return res.status(400).json({
+                message: "User does not exist"
+            });
+        }
+
+        // deleting the user
+        const deletedUser = await pool.request()
+            .input('id', mssql.VarChar, id)
+            .execute('delete_user_proc');
+
+        return res.status(200).json({
+            message: "User deleted successfully"
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+}
 
 module.exports = {
     userRegistrationController,
     loginUser,
     adminGetAllUsersController,
     forgotPasswordController,
-    resetPasswordController
+    resetPasswordController,
+    deleteUserControllerHard
 }

@@ -346,6 +346,48 @@ const deletePostController = async (req, res) => {
     }
 }
 
+// delete post controller, hard delete
+const deletePostControllerHard = async (req, res) => {
+    try {
+        const authenticated_user = req.user;
+        const {id} = req.params;
+
+        const pool = await mssql.connect(sqlConfig);
+
+        // checking if the post exist
+        const post = await pool.request()
+            .input('id', mssql.VarChar, id)
+            .execute('get_post_by_id_proc');
+
+        if (post.recordset.length === 0) {
+            return res.status(404).json({
+                message: 'Post not found'
+            });
+        }
+
+        // assertaining that the user is the owner of the post
+        if (post.recordset[0].user_id !== authenticated_user.id) {
+            return res.status(401).json({
+                message: 'You cannot delete this post!'
+            });
+        }
+
+        // deleting the post
+        const deletedPost = await pool.request()
+            .input('id', mssql.VarChar, id)
+            .execute('hard_delete_post_proc');
+
+        return res.status(200).json({
+            message: 'Post deleted successfully',
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+}
+
 // Like Unlike Post Controller
 const likeUnlikePostController = async (req, res) => {
     try {
@@ -852,6 +894,7 @@ module.exports = {
     getPostDetailsController,
     updatePostController,
     deletePostController,
+    deletePostControllerHard,
     getUserPostsController,
 
     likeUnlikePostController,
