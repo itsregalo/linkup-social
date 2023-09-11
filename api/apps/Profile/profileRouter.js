@@ -4,7 +4,7 @@ const { getUserProfileController, updateUserProfileController } = require('./pro
 const profileRouter = Router();
 
 
-profileRouter.get('/user/profile/:id', verifyToken, getUserProfileController);
+profileRouter.get('/profile/:id', verifyToken, getUserProfileController);
 profileRouter.put('/auth/update/profile/:id', verifyToken, updateUserProfileController);
 
 module.exports = profileRouter;

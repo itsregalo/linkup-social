@@ -1,6 +1,7 @@
 const mssql = require('mssql');
 const {v4} = require('uuid');
 const sqlConfig = require('../../Config/Config');
+const { userUpdateValidateor } = require('../../Validators/AuthenticationValidators');
 
 
 
@@ -41,16 +42,7 @@ const updateUserProfileController = async (req, res) => {
             })
         }
 
-        // checking if the username is already taken
-        const username_taken = await pool.request()
-            .input('username', mssql.VarChar, username)
-            .execute('get_user_by_username_proc');
 
-        if(username_taken.recordset.length > 0) {
-            return res.status(400).json({
-                message: "Username is already taken"
-            });
-        }
 
         // updating the user
         const updated_user = await pool.request()
