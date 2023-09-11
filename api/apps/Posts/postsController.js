@@ -1,6 +1,8 @@
 const mssql = require('mssql');
 const {v4} = require('uuid');
 const sqlConfig = require('../../Config/Config');
+const { cloudinary } = require('../../Utils/cloudinaryConfig');
+const { getTaggedUsers, addTaggedUsers } = require('./postUtils');
 
 
 /**
@@ -13,6 +15,21 @@ const getAllPostsController = async (req, res) => {
         const pool = await mssql.connect(sqlConfig);
         const posts = await pool.request()
             .execute('get_all_posts_proc');
+        return res.status(200).json({
+            posts: posts.recordset
+        });
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+}
+
+const getActivePostsController = async (req, res) => {
+    try {
+        const pool = await mssql.connect(sqlConfig);
+        const posts = await pool.request()
+            .execute('get_active_posts_proc');
         return res.status(200).json({
             posts: posts.recordset
         });
@@ -42,8 +59,12 @@ const getUserPostsController = async (req, res) => {
 
         // getting the user posts
         const posts = await pool.request()
-            
+            .input('user_id', mssql.VarChar, id)
+            .execute('get_user_posts_proc');
 
+        return res.status(200).json({
+            posts: posts.recordset
+        });
     } catch (error) {
         return res.status(500).json({
             error: error.message
@@ -81,6 +102,11 @@ const getPostDetailsController = async (req, res) => {
             .input('post_id', mssql.VarChar, id)
             .execute('get_post_likes_proc');
 
+        // get users tagged in post
+        const tagged_users = await pool.request()
+            .input('post_id', mssql.VarChar, id)
+            .execute('get_post_users_tagged');
+
         // get post category
         const category_id = post.recordset[0].category_id;
 
@@ -92,7 +118,9 @@ const getPostDetailsController = async (req, res) => {
             post: post.recordset[0],
             comments: comments.recordset,
             likes: likes.recordset,
-            category: category.recordset[0]
+            category: category.recordset[0],
+            tagged_users: tagged_users.recordset
+
         });
     } catch (error) {
         return res.status(500).json({
@@ -106,6 +134,7 @@ const createPostController = async (req, res) => {
     try {
         const authenticated_user = req.user;
         let {picture, content, caregory_id} = req.body;
+        const post_id = v4();
 
         // content is required
         if (!content) {
@@ -127,11 +156,40 @@ const createPostController = async (req, res) => {
             .input('id', mssql.VarChar, caregory_id)
             .execute('get_category_by_id_proc');
 
-        console.log(category.recordset);
-
         if (category.recordset.length === 0) {
             return res.status(404).json({
                 message: 'Category not found'
+            });
+        }
+
+        // checking if the user has uploaded a picture
+        if (picture) {
+            const cloudinaryOptions = {
+                use_filename: true,
+                unique_filename: false,
+                overwrite: true,
+                resource_type: "auto"
+            };
+            // uploading the picture to cloudinary
+            const uploadedPicture = await cloudinary.uploader.upload(picture, cloudinaryOptions, (error, result) => {
+                if (error) {
+                    return res.status(500).json({
+                        error: error.message    
+                    });
+                }
+            });
+
+            picture = uploadedPicture.secure_url;
+        }
+
+        // check for tagged users in the content
+        const tagged_users = await getTaggedUsers(content);
+
+        try {
+            await addTaggedUsers(post_id, tagged_users);
+        } catch (error) {
+            return res.status(500).json({
+                error: error.message
             });
         }
 
@@ -206,6 +264,26 @@ const updatePostController = async (req, res) => {
             return res.status(404).json({
                 message: 'Category not found'
             });
+        }
+
+        // checking if the user has uploaded a picture
+        if (picture) {
+            const cloudinaryOptions = {
+                use_filename: true,
+                unique_filename: false,
+                overwrite: true,
+                resource_type: "auto"
+            };
+            // uploading the picture to cloudinary
+            const uploadedPicture = await cloudinary.uploader.upload(picture, cloudinaryOptions, (error, result) => {
+                if (error) {
+                    return res.status(500).json({
+                        error: error
+                    });
+                }
+            });
+
+            picture = uploadedPicture.secure_url;
         }
 
         // updating the post
@@ -769,10 +847,12 @@ const deleteCommentReplyController = async (req, res) => {
 module.exports = {
     createPostController,
     getAllPostsController,
+    getActivePostsController,
     getPostComments,
     getPostDetailsController,
     updatePostController,
     deletePostController,
+    getUserPostsController,
 
     likeUnlikePostController,
 

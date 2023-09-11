@@ -2,7 +2,7 @@ const mssql = require('mssql');
 const {v4} = require('uuid');
 const sqlConfig = require('../../Config/Config');
 
-const getUserFollowersProcedure = async (req, res) => {
+const getUserFollowersController = async (req, res) => {
     try {
         const {id} = req.params;
 
@@ -35,7 +35,7 @@ const getUserFollowersProcedure = async (req, res) => {
     }
 }
 
-const getUserFollowingProcedure = async (req, res) => {
+const getUserFollowingController = async (req, res) => {
     try {
         const {id} = req.params;
         const pool = await mssql.connect(sqlConfig);
@@ -55,7 +55,7 @@ const getUserFollowingProcedure = async (req, res) => {
     }
 }
 
-const followUnfollowUserProcedure = async (req, res) => {
+const followUnfollowUserController = async (req, res) => {
     try {
         const authenticated_user = req.user;
         const {user_id} = req.params;
@@ -109,7 +109,7 @@ const followUnfollowUserProcedure = async (req, res) => {
 }
 
 // procedure to get users that I hace not followed
-const getUsersNotFollowingProcedure = async (req, res) => {
+const getUsersNotFollowingController = async (req, res) => {
     try {
         const authenticated_user = req.user;
 
@@ -130,9 +130,37 @@ const getUsersNotFollowingProcedure = async (req, res) => {
         });
     }
 }
+
+const suggestFollowers = async (req, res) => {
+    try {
+        const authenticated_user = req.user;
+
+        const pool = await mssql.connect(sqlConfig);
+
+        // getting users that I have not followed
+        const users_not_following = await pool.request()
+            .input('user_id', mssql.VarChar(50), authenticated_user.id)
+            .execute('get_users_not_following_proc');
+
+        // get 3 random users
+        const random_users = users_not_following.recordset.sort(() => Math.random() - Math.random()).slice(0, 3);
+        
+        return res.status(200).json({
+            random_users: random_users
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+}
+
+
 module.exports = {
-    getUserFollowersProcedure,
-    getUserFollowingProcedure,
-    followUnfollowUserProcedure,
-    getUsersNotFollowingProcedure
+    getUserFollowersController,
+    getUserFollowingController,
+    followUnfollowUserController,
+    getUsersNotFollowingController,
+    suggestFollowers
 }
