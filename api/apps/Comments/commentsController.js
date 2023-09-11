@@ -43,10 +43,10 @@ const addCommentToPostController = async (req, res) => {
             message: 'Comment added successfully',
         });
     } catch (error) {
-       return res.status(500).json({
-           error: error.message
-       }); 
-    }
+        return res.status(500).json({
+                error: error.message
+            }); 
+        }
 }
 
 // Update Post Comment Controller

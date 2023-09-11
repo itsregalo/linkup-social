@@ -264,6 +264,19 @@ const forgotPasswordController = async (req, res) => {
             `
         }
 
+        // updating the reset token
+        try {
+            const create_reset_token = await pool.request()
+                .input('id', mssql.VarChar, v4())
+                .input('user_id', mssql.VarChar, user.recordset[0].id)
+                .input('reset_token', mssql.VarChar, token)
+                .execute('create_reset_token_proc');
+        } catch (error) {
+            return res.status(500).json({
+                error: error.message
+            });
+        }
+
         transporter.sendMail(mailOptions, (error, info) => {
             if(error) {
                 return res.status(400).json({
@@ -286,17 +299,17 @@ const forgotPasswordController = async (req, res) => {
 // reset password controller
 const resetPasswordController = async (req, res) => {
     try {
-        const {resetToken, newPassword, repeatNewPassword} = req.body;
+        const {reset_token, new_password, repeat_password} = req.body;
 
         // validating the email
-        if(!(resetToken && newPassword && repeatNewPassword)) {
+        if(!(reset_token && new_password && repeat_password)) {
             return res.status(400).json({
                 message: "All fields are required"
             });
         }
 
         // checking if the passwords match
-        if(newPassword !== repeatNewPassword) {
+        if(new_password !== repeat_password) {
             return res.status(400).json({
                 message: "Passwords do not match"
             });
@@ -307,8 +320,9 @@ const resetPasswordController = async (req, res) => {
 
         // checking if the user exists
         const user = await pool.request()
-            .input('resetToken', mssql.VarChar, resetToken)
+            .input('reset_token', mssql.VarChar, reset_token)
             .execute('get_user_by_reset_token_proc');
+            
 
         if(user.recordset.length === 0) {
             return res.status(400).json({
