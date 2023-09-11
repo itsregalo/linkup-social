@@ -113,7 +113,114 @@ const getUserProfileController = async (req, res) => {
     }
 }
 
+// updating the background picture
+const updateBackgroundPictureController = async (req, res) => {
+    try {
+        // getting the authenticated user
+        const authenticated_user = req.user;
+        const {id} = req.params;
+
+        // checking if the user is authenticated
+        if(authenticated_user.id !== id) {
+            return res.status(403).json({
+                message: "Access denied"
+            });
+        }
+
+        // checking if the user exists
+        const pool = await mssql.connect(sqlConfig);
+        const user = await pool.request()
+            .input('id', mssql.VarChar, id)
+            .execute('get_user_by_id_proc');
+
+        if(user.recordset.length === 0) {
+            return res.status(400).json({
+                message: "User does not exist"
+            });
+        }
+
+        // updating the user background picture
+        const {background_picture} = req.body;
+
+        // making sure the background picture is not empty
+        if(!background_picture) {
+            return res.status(400).json({
+                message: "Field cannot be empty"
+            });
+        }
+
+        // updating the user
+        const updated_user = await pool.request()
+            .input('id', mssql.VarChar, id)
+            .input('background_picture', mssql.VarChar, background_picture)
+            .execute('update_user_background_picture_proc');
+
+        return res.status(200).json({
+            message: "User background picture updated successfully"
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+}
+
+const updateProfilePicController = async (req, res) => {
+    try {
+        // authenticated user
+        const authenticated_user = req.user;
+        const {id} = req.params;
+
+        // checking if the user is authenticated
+        if(authenticated_user.id !== id) {
+            return res.status(403).json({
+                message: "Access denied"
+            });
+        }
+
+        // checking if the user exists
+        const pool = await mssql.connect(sqlConfig);
+        const user = await pool.request()
+            .input('id', mssql.VarChar, id)
+            .execute('get_user_by_id_proc');
+
+        if(user.recordset.length === 0) {
+            return res.status(400).json({
+                message: "User does not exist"
+            });
+        }
+
+        // updating the user profile picture
+        const {profile_picture} = req.body;
+
+        // making sure the profile picture is not empty
+        if(!profile_picture) {
+            return res.status(400).json({
+                message: "Field cannot be empty"
+            });
+        }
+
+        // updating the user
+        const updated_user = await pool.request()
+            .input('id', mssql.VarChar, id)
+            .input('profile_picture', mssql.VarChar, profile_picture)
+            .execute('update_user_profile_picture_proc');
+
+        return res.status(200).json({
+            message: "User profile picture updated successfully"
+        });
+        
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+}
+
 module.exports = {
     updateUserProfileController,
-    getUserProfileController
+    getUserProfileController,
+    updateBackgroundPictureController,
+    updateProfilePicController
 }

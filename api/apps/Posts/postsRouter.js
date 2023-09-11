@@ -12,6 +12,7 @@ postsRouter.put('/delete/s/:id', verifyToken, deletePostController)
 postsRouter.delete('/delete/h/:id', verifyToken, deletePostControllerHard)
 postsRouter.get('/user/:id', getUserPostsController)
 
+
 postsRouter.post('/:id/like', verifyToken, likeUnlikePostController)
 
 
