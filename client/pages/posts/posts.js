@@ -8,18 +8,19 @@ const message_div = document.querySelector('.message');
 
 if (!token) {
     window.location.href = "/client/pages/auth/login.html";
-} else {
+}  else {
     const is_authenticated = true;
 }
+
 
 // getting a ist of all posts from the database
 const get_posts = async () => {
     try {
         const data = await fetch(`${base_url}/posts`, {
             method: 'GET',
-            body: JSON.stringify(),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
             }
         });
 
