@@ -12,7 +12,7 @@ export const get_user_details = async (user_id) => {
         });
 
         const data = await response.json();
-
+        
         if (response.status === 200) {
             return data;
         }
