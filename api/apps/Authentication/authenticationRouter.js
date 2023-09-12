@@ -10,5 +10,6 @@ authenticationRouter.post('/reset-password', resetPasswordController);
 authenticationRouter.get('/users/all', adminGetAllUsersController);
 authenticationRouter.delete('/user/delete/:id', verifyToken, deleteUserControllerHard);
 authenticationRouter.get('/user/info/:id', basicUserDetails);
+authenticationRouter.post('/user/verify-token', verifyToken);
 
 module.exports = authenticationRouter;

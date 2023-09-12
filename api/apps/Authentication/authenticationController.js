@@ -436,6 +436,30 @@ const basicUserDetails = async (req, res) => {
     }
 }
 
+// checking if token is valid
+const checkToken = async (req, res) => {
+    try {
+        const {token} = req.body;
+
+        if(!token) {
+            return res.status(400).json({
+                message: "Token is required"
+            });
+        }
+
+        const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
+
+        return res.status(200).json({
+            message: "Token is valid"
+        });
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+}
+
+
 module.exports = {
     userRegistrationController,
     loginUser,
@@ -443,5 +467,6 @@ module.exports = {
     forgotPasswordController,
     resetPasswordController,
     deleteUserControllerHard,
-    basicUserDetails
+    basicUserDetails,
+    checkToken
 }

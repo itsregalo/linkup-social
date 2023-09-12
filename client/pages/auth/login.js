@@ -1,4 +1,4 @@
-const base_url = 'http://localhost:8000/api'
+const base_url = 'https://74d7-105-163-157-110.ngrok-free.app/api'
 
 const token = localStorage.getItem('token');
 const user = JSON.parse(localStorage.getItem('user'));
@@ -26,7 +26,7 @@ const submitLoginForm = async (user) => {
     }
 }
 
-function loginFormSubmitEvent() {
+const loginFormSubmitEvent = () => {
     const login_form = document.querySelector('#login_form');
 
     login_form.addEventListener('submit', (e) => {
@@ -64,23 +64,3 @@ function loginFormSubmitEvent() {
     });
 }
 
-
-export const get_user_details = async (user_id) => {
-    try {
-        const response = await fetch(`${base_url}/auth/user/info/${user_id}`, {
-            method: 'GET',
-            body: JSON.stringify(),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
-        const data = await response.json();
-
-        if (response.status === 200) {
-            return data;
-        }
-    } catch (error) {
-        console.log(error);
-    }
-}
