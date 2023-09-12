@@ -2,7 +2,14 @@ const mssql = require('mssql');
 const {v4} = require('uuid');
 const sqlConfig = require('../../Config/Config');
 const { userUpdateValidateor } = require('../../Validators/AuthenticationValidators');
+const { cloudinary } = require('../../Utils/cloudinaryConfig');
 
+const cloudinaryOptions = {
+    use_filename: true,
+    unique_filename: false,
+    overwrite: true,
+    resource_type: "auto"
+};
 
 
 // update user profile controller
@@ -149,10 +156,24 @@ const updateBackgroundPictureController = async (req, res) => {
             });
         }
 
+        // upload to cloudinary
+        const uploaded_image = await cloudinary.uploader.upload(
+            background_picture, cloudinaryOptions, (error, result) => {
+                if(error) {
+                    return res.status(500).json({
+                        error: error.message
+                    });
+                }
+            }
+        )
+
+        // getting the image url
+        const image_url = uploaded_image.secure_url;
+
         // updating the user
         const updated_user = await pool.request()
             .input('id', mssql.VarChar, id)
-            .input('background_picture', mssql.VarChar, background_picture)
+            .input('background_picture', mssql.VarChar, image_url)
             .execute('update_user_background_picture_proc');
 
         return res.status(200).json({
@@ -201,10 +222,24 @@ const updateProfilePicController = async (req, res) => {
             });
         }
 
+        // upload to cloudinary
+        const uploaded_image = await cloudinary.uploader.upload(
+            profile_picture, cloudinaryOptions, (error, result) => {
+                if(error) {
+                    return res.status(500).json({
+                        error: error.message
+                    });
+                }
+            }
+        )
+
+        // getting the image url
+        const image_url = uploaded_image.secure_url;
+
         // updating the user
         const updated_user = await pool.request()
             .input('id', mssql.VarChar, id)
-            .input('profile_picture', mssql.VarChar, profile_picture)
+            .input('profile_picture', mssql.VarChar, image_url)
             .execute('update_user_profile_picture_proc');
 
         return res.status(200).json({

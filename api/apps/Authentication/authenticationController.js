@@ -118,7 +118,7 @@ const userRegistrationController = async (req, res) => {
             });
         }
 
-        return res.status(200).json({
+        return res.status(201).json({
             token,
             user: {
                 id: new_user_id,
@@ -402,11 +402,46 @@ const deleteUserControllerHard = async (req, res) => {
     }
 }
 
+const basicUserDetails = async (req, res) => {
+    try {
+        const {id} = req.params;
+
+        // creating a pool
+        const pool = await mssql.connect(sqlConfig);
+
+        //checking if the user exists
+        const user = await pool.request()
+            .input('id', mssql.VarChar, id)
+            .execute('get_user_by_id_proc');
+
+        if(user.recordset.length === 0) {
+            return res.status(400).json({
+                message: "User does not exist"
+            });
+        }
+
+        return res.status(200).json({
+            user: {
+                id: user.recordset[0].id,
+                email: user.recordset[0].email,
+                username: user.recordset[0].username,
+                full_name: user.recordset[0].full_name,
+                profile_picture: user.recordset[0].profile_picture,
+            }
+        });
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+}
+
 module.exports = {
     userRegistrationController,
     loginUser,
     adminGetAllUsersController,
     forgotPasswordController,
     resetPasswordController,
-    deleteUserControllerHard
+    deleteUserControllerHard,
+    basicUserDetails
 }
