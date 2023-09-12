@@ -10,17 +10,20 @@ if (!token) {
     const is_authenticated = true;
 }
 
-const get_user_details = async (user_id) => {
+const get_user_profile = async () => {
     try {
-        const response = await fetch(`${base_url}/user/info/${user_id}`, {
-            method: 'GET',
-            body: JSON.stringify(),
+        const response = await fetch(`${base_url}/user/profile/${user.id}`, {
             headers: {
                 'Content-Type': 'application/json'
             }
         });
+
+        const data = await response.json();
+        console.log(data);
+
     } catch (error) {
-        
+        console.log(error);
     }
 }
 
+get_user_profile();

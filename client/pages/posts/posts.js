@@ -17,10 +17,8 @@ if (!token) {
 const get_posts = async () => {
     try {
         const data = await fetch(`${base_url}/posts`, {
-            method: 'GET',
             headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
+                'Content-Type': 'application/json'
             }
         });
 
