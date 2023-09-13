@@ -1,5 +1,5 @@
 import { get_user_details } from "/client/assets/js/modules.js"
-const base_url = 'https://74d7-105-163-157-110.ngrok-free.app/api'
+const base_url = 'http://127.0.0.1:8000/api'
 
 const token = localStorage.getItem('token');
 const user = JSON.parse(localStorage.getItem('user'));
@@ -16,7 +16,7 @@ if (!token) {
 // getting a ist of all posts from the database
 const get_posts = async () => {
     try {
-        const data = await fetch(`${base_url}/posts`, {
+        const data = await fetch(`${base_url}/posts/current/all`, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -28,7 +28,10 @@ const get_posts = async () => {
         posts_div.innerHTML = ``;
 
         if (data.status === 200) {
-            const post_array = posts.posts;
+            // ordwer the posts by post_date
+            const post_array = posts.posts.sort((a,b) => {
+                return new Date(b.post_date) - new Date(a.post_date);
+            });
                 
             post_array.forEach((post,index)=>{
 

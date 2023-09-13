@@ -13,7 +13,7 @@
 <body>
 
     <div class="loader">
-        <img src="/client/assets/images/link_up_logo.png" alt="" width="70%">
+        <img src="/client/assets/images/logo.png" alt="" width="70%">
     </div>
     
     <div class="container-fluid main-content">
@@ -21,7 +21,7 @@
             <div class="col-12">
                 <div class="col-2 menu">
                     <div class="logo">
-                        <img src="/client/assets/images/link_up_logo.png" alt="" width="70%">
+                        <img src="/client/assets/images/logo.png" alt="" width="70%">
                     </div>
     
                     <div class="main-nav">
@@ -161,10 +161,10 @@
     
                 <div class="col-3 most-right">
                     <div class="new_post">
-                        <form class="new_post_form" action="" method="post">
-                            <textarea name="" id="" cols="30" rows="5" placeholder="What's on your mind?"></textarea>
+                        <form class="new_post_form" action="" method="post" id="new_post_form" enctype="multipart/form-data">
+                            <textarea name="content" id="form_post_content" cols="30" rows="5" placeholder="What's on your mind?"></textarea>
                             <div class="bottom_inputs">
-                                <input type="file" name="" id="" class="add_image_to_post">
+                                <input type="file" name="picture" id="form_post_picture" class="add_image_to_post" accept="image/*">
                                 <button class="btn" type="submit">Post</button>
                             </div>
                         </form>
@@ -276,5 +276,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     <script src="/client/assets/js/main.js"></script>
     <script type="module" src="/client/pages/posts/posts.js"></script>
+    <script src="/client/pages/posts/create_post.js"></script>
 </body>
 </html>

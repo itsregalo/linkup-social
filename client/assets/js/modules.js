@@ -1,4 +1,4 @@
-const module_base_url = 'https://74d7-105-163-157-110.ngrok-free.app/api'
+const module_base_url = 'http://127.0.0.1:8000/api'
 
 
 export const get_user_details = async (user_id) => {

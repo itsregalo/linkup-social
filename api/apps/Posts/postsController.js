@@ -3,7 +3,7 @@ const {v4} = require('uuid');
 const sqlConfig = require('../../Config/Config');
 const { cloudinary } = require('../../Utils/cloudinaryConfig');
 const { getTaggedUsers, addTaggedUsers } = require('./postUtils');
-
+const upload = require('../../middleware/multer');
 
 /**
  * Post Controllers
@@ -132,6 +132,8 @@ const getPostDetailsController = async (req, res) => {
 // Create Post Controller
 const createPostController = async (req, res) => {
     try {
+
+        console.log(req.body);
         const authenticated_user = req.user;
         let {picture, content, caregory_id} = req.body;
         const post_id = v4();
@@ -164,22 +166,22 @@ const createPostController = async (req, res) => {
 
         // checking if the user has uploaded a picture
         if (picture) {
-            const cloudinaryOptions = {
-                use_filename: true,
-                unique_filename: false,
-                overwrite: true,
-                resource_type: "auto"
-            };
-            // uploading the picture to cloudinary
-            const uploadedPicture = await cloudinary.uploader.upload(picture, cloudinaryOptions, (error, result) => {
-                if (error) {
-                    return res.status(500).json({
-                        error: error.message    
-                    });
-                }
-            });
+            // const cloudinaryOptions = {
+            //     use_filename: true,
+            //     unique_filename: false,
+            //     overwrite: true,
+            //     resource_type: "auto"
+            // };
+            // // uploading the picture to cloudinary
+            // const uploadedPicture = await cloudinary.uploader.upload(picture, cloudinaryOptions, (error, result) => {
+            //     if (error) {
+            //         return res.status(500).json({
+            //             error: error.message    
+            //         });
+            //     }
+            // });
 
-            picture = uploadedPicture.secure_url;
+            // picture = uploadedPicture.secure_url;
         }
 
         // check for tagged users in the content
@@ -202,11 +204,12 @@ const createPostController = async (req, res) => {
             .input('category_id', mssql.VarChar, caregory_id)
             .execute('create_post_proc');
 
-        return res.status(200).json({
+        return res.status(201).json({
             message: 'Post created successfully',
         });
 
     } catch (error) {
+        console.log(error);
         return res.status(500).json({
             error: error.message
         });
