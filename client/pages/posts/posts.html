@@ -10,19 +10,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,300;6..12,400;6..12,700;6..12,800&display=swap" rel="stylesheet">
 </head>
-<body class="light">
+<body>
 
     <div class="loader">
         <img src="/client/assets/images/logo.png" alt="" width="70%">
     </div>
-
     
     <div class="container-fluid main-content">
         <div class="row">
             <div class="col-12">
                 <div class="col-2 menu">
                     <div class="logo">
-                        <img src="/client/assets/images/link_up_logo.png" alt="" width="70%">
+                        <img src="/client/assets/images/logo.png" alt="" width="70%">
                     </div>
     
                     <div class="main-nav">
@@ -50,7 +49,7 @@
                                 </div>
                                 <div class="topic-item">
                                     <img src="/client/assets/images/icons/movies-and-tv-24-regular.svg" alt="">
-                                    <a href="/client/pages/posts/category-list.html">Movies</a>
+                                    <a href="/client/pages/posts/category-list.html">Movies/Shows</a>
                                 </div>
                                 <div class="topic-item">
                                     <img src="/client/assets/images/icons/music.svg" alt="">
@@ -64,37 +63,14 @@
                                     <img src="/client/assets/images/icons/news.svg" alt="">
                                     <a href="/client/pages/posts/category-list.html">News</a>
                                 </div>
-                            </div> 
-                        </div>
-                    </div>
-                    <div class="toggle_theme">
-                        <button id="toggle_theme_btn">
-                            <img src="/client/assets/images/icons/dark-theme.svg" alt="">
-                        </button>
+                            </div>  
+                        </div> 
                     </div>
                 </div>
     
     
                 <div class="col-lg-7 col-sm-10 content">
-                    <div class="mobile_head_nav">
-                        <div class="profile_icon_mobile">
-                            <a href="">
-                                <img src="/client/assets/images/users/itsregalo.jpg" alt="">
-                            </a>
-                        </div>
-
-                        <div class="logo_mobile_head">
-                            <a href="">
-                                <img src="/client/assets/images/link_up_logo.png" alt="" width="70%">
-                            </a>
-                        </div>
-
-                        <div class="setting_mobile_head">
-                            <a href="">
-                                <img src="/client/assets/images/icons/dark-theme.svg" alt="">
-                            </a>
-                        </div>
-                    </div>
+                    
 
                    <div class="search-input">
                         <form action="" method="post">
@@ -102,7 +78,7 @@
                         </form>
                    </div>
     
-                   <div class="posts overflow-auto" id="posts">
+                   <div class="posts overflow-auto" id="general_posts">
                     <div class="card post_card">
                         <div class="card-header post_head">
                             <div class="profile_pic_user">
@@ -116,7 +92,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <a class="post_link" href="">
+                            <a class="post_link" href="/client/post-detail.html">
                                 <img src="/client/assets/images/trump.png" alt="" width="100%">
                                 <div class="caption">
                                     <p>Next Level #Trump</p>
@@ -155,7 +131,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <a class="post_link" href="">
+                            <a class="post_link" href="/client/post-detail.html">
                                 <img src="/client/assets/images/trump.png" alt="" width="100%">
                                 <div class="caption">
                                     <p>Next Level #Trump</p>
@@ -185,10 +161,10 @@
     
                 <div class="col-3 most-right">
                     <div class="new_post">
-                        <form class="new_post_form" action="" method="post">
-                            <textarea name="" id="" cols="30" rows="5" placeholder="What's on your mind?"></textarea>
+                        <form class="new_post_form" action="" method="post" id="new_post_form" enctype="multipart/form-data">
+                            <textarea name="content" id="form_post_content" cols="30" rows="5" placeholder="What's on your mind?"></textarea>
                             <div class="bottom_inputs">
-                                <input type="file" name="" id="" class="add_image_to_post">
+                                <input type="file" name="picture" id="form_post_picture" class="add_image_to_post" accept="image/*">
                                 <button class="btn" type="submit">Post</button>
                             </div>
                         </form>
@@ -297,14 +273,9 @@
             </nav>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" 
-        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" 
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     <script src="/client/assets/js/main.js"></script>
-    <script src="/client/index.js"></script>
-
-    <script>
-        changeTheme();
-    </script>
+    <script type="module" src="/client/pages/posts/posts.js"></script>
+    <script src="/client/pages/posts/create_post.js"></script>
 </body>
 </html>

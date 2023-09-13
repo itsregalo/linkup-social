@@ -436,10 +436,24 @@ body {
     background-color: #ffffff;
 }
 
+.background_image {
+    display: inline-block;
+}
+
+.top_right_button {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
 /* make profile photo appear between these two divs above and below */
 .profile_photo {
     padding: 0 10px;
     margin-top: -50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
 }
 
 .profile_photo img {
@@ -450,6 +464,12 @@ body {
 .user_profile_area .profile_pic {
     float: left;
     background-color: #ffffff;
+}
+
+.edit_profile_btn .btn{
+    float: left;
+    background-color: #ffffff;
+    padding: 0 10px;
 }
 
 .user_info {

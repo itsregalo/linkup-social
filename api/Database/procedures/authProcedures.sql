@@ -157,3 +157,33 @@ BEGIN
     DELETE FROM users WHERE id = @id;
 END;
 GO
+
+-- procedure for tokens
+
+CREATE OR ALTER PROCEDURE get_user_by_reset_token_proc
+    @reset_token VARCHAR(255)
+AS
+BEGIN
+    SELECT * FROM user_reset_tokens WHERE token = @reset_token AND is_expired = 0;
+END;
+GO
+
+-- procedure to create a token
+CREATE OR ALTER PROCEDURE create_reset_token_proc
+    @id VARCHAR(255),
+    @user_id VARCHAR(255),
+    @reset_token VARCHAR(255)
+AS
+BEGIN
+    INSERT INTO user_reset_tokens (id, user_id, token)
+    VALUES (@id, @user_id, @reset_token);
+END;
+GO
+
+-- procedure to update a token as expired
+CREATE OR ALTER PROCEDURE update_reset_token_proc
+    @reset_token VARCHAR(255)
+AS
+BEGIN
+    UPDATE user_reset_tokens SET is_expired = 1 WHERE token = @reset_token;
+END;

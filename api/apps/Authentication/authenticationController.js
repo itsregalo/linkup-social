@@ -118,7 +118,7 @@ const userRegistrationController = async (req, res) => {
             });
         }
 
-        return res.status(200).json({
+        return res.status(201).json({
             token,
             user: {
                 id: new_user_id,
@@ -264,6 +264,19 @@ const forgotPasswordController = async (req, res) => {
             `
         }
 
+        // updating the reset token
+        try {
+            const create_reset_token = await pool.request()
+                .input('id', mssql.VarChar, v4())
+                .input('user_id', mssql.VarChar, user.recordset[0].id)
+                .input('reset_token', mssql.VarChar, token)
+                .execute('create_reset_token_proc');
+        } catch (error) {
+            return res.status(500).json({
+                error: error.message
+            });
+        }
+
         transporter.sendMail(mailOptions, (error, info) => {
             if(error) {
                 return res.status(400).json({
@@ -286,17 +299,17 @@ const forgotPasswordController = async (req, res) => {
 // reset password controller
 const resetPasswordController = async (req, res) => {
     try {
-        const {resetToken, newPassword, repeatNewPassword} = req.body;
+        const {reset_token, new_password, repeat_password} = req.body;
 
         // validating the email
-        if(!(resetToken && newPassword && repeatNewPassword)) {
+        if(!(reset_token && new_password && repeat_password)) {
             return res.status(400).json({
                 message: "All fields are required"
             });
         }
 
         // checking if the passwords match
-        if(newPassword !== repeatNewPassword) {
+        if(new_password !== repeat_password) {
             return res.status(400).json({
                 message: "Passwords do not match"
             });
@@ -307,8 +320,9 @@ const resetPasswordController = async (req, res) => {
 
         // checking if the user exists
         const user = await pool.request()
-            .input('resetToken', mssql.VarChar, resetToken)
+            .input('reset_token', mssql.VarChar, reset_token)
             .execute('get_user_by_reset_token_proc');
+            
 
         if(user.recordset.length === 0) {
             return res.status(400).json({
@@ -388,11 +402,71 @@ const deleteUserControllerHard = async (req, res) => {
     }
 }
 
+const basicUserDetails = async (req, res) => {
+    try {
+        const {id} = req.params;
+
+        // creating a pool
+        const pool = await mssql.connect(sqlConfig);
+
+        //checking if the user exists
+        const user = await pool.request()
+            .input('id', mssql.VarChar, id)
+            .execute('get_user_by_id_proc');
+
+        if(user.recordset.length === 0) {
+            return res.status(400).json({
+                message: "User does not exist"
+            });
+        }
+
+        return res.status(200).json({
+            user: {
+                id: user.recordset[0].id,
+                email: user.recordset[0].email,
+                username: user.recordset[0].username,
+                full_name: user.recordset[0].full_name,
+                profile_picture: user.recordset[0].profile_picture,
+            }
+        });
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+}
+
+// checking if token is valid
+const checkToken = async (req, res) => {
+    try {
+        const {token} = req.body;
+
+        if(!token) {
+            return res.status(400).json({
+                message: "Token is required"
+            });
+        }
+
+        const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
+
+        return res.status(200).json({
+            message: "Token is valid"
+        });
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+}
+
+
 module.exports = {
     userRegistrationController,
     loginUser,
     adminGetAllUsersController,
     forgotPasswordController,
     resetPasswordController,
-    deleteUserControllerHard
+    deleteUserControllerHard,
+    basicUserDetails,
+    checkToken
 }
