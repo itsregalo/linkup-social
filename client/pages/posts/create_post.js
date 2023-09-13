@@ -13,8 +13,6 @@ new_post_form.addEventListener('submit', (e) => {
     const picture = document.querySelector('#form_post_picture').files[0];
 
     const picture_url = document.querySelector('#form_post_picture').value;
-
-    console.log(picture_url);
     
     // upload the picture to cloudinary
     const cloudinary_url = 'https://api.cloudinary.com/v1_1/ddv1q5oiq/image/upload';
