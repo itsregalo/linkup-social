@@ -132,8 +132,6 @@ const getPostDetailsController = async (req, res) => {
 // Create Post Controller
 const createPostController = async (req, res) => {
     try {
-
-        console.log(req.body);
         const authenticated_user = req.user;
         let {picture, content, caregory_id} = req.body;
         const post_id = v4();
