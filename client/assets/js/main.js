@@ -55,6 +55,53 @@ const get_suggested_users = async () => {
     }
 }
 
+
+
+const followOrUnfollow = async (user_id) => {
+    try {
+        const response = await fetch(`${base_url}/followers/user/${user_id}/follow`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            }
+        });
+
+        const data = await response.json();
+        console.log(data);
+        if (data.error == 'jwt expired') {
+            window.location.href = "/client/pages/auth/login.html"
+        }
+        
+        if (response.status === 200) {
+            const follow_btn_div = document.querySelector(`#follow_btn_div_${user.id}`);
+
+            if (data.message == 'Successfully followed user') {
+                
+                follow_btn_div.innerHTML = ``;
+                follow_btn_div.innerHTML += `
+                <button class="btn btn-outline-primary" id="follow_btn_${user.id}" onclick="followOrUnfollow('${user.id}')">
+                    Follow
+                </button>
+                `;
+            } 
+            else if (data.message == 'Unfollowed user') {
+                follow_btn_div.innerHTML = ``;
+                follow_btn_div.innerHTML += `
+                <button class="btn btn-primary" id="follow_btn_${user.id}" onclick="followOrUnfollow('${user.id}')">
+                    Follow
+                </button>
+                `;
+            }
+            else {
+                console.log(data.message);
+            }
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 window.addEventListener('load', function(){
     document.querySelector('.loader').style.display = 'none';
 })

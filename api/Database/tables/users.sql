@@ -15,6 +15,7 @@ CREATE TABLE users (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Table: user_followers
 DROP TABLE IF EXISTS users_reset_tokens;
 
 CREATE TABLE user_reset_tokens (
