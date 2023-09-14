@@ -84,6 +84,11 @@ const get_user_profile = async () => {
         if (data.user_posts.length > 0) {
             const the_posts = data.user_posts;
 
+            // sort posts by date
+            the_posts.sort((a, b) => {
+                return new Date(b.post_date) - new Date(a.post_date);
+            });
+
             
             user_posts_div.innerHTML = ``;
 
@@ -104,9 +109,8 @@ const get_user_profile = async () => {
                             </div>
                             <div class="card-body">
                                 <a class="post_link" href="">
-                                    <img src="/client/assets/images/trump.png" alt="" width="100%">
                                     <div class="caption">
-                                        <p>Next Level #Trump</p>
+                                        <p>${post.content}</p>
                                     </div>
                                 </a>
                             </div>
@@ -145,7 +149,7 @@ const get_user_profile = async () => {
                         </div>
                         <div class="card-body">
                             <a class="post_link" href="">
-                                <img src="/client/assets/images/trump.png" alt="" width="100%">
+                                <img src="${post.picture}" alt="" width="100%">
                                 <div class="caption">
                                     <p>Next Level #Trump</p>
                                 </div>

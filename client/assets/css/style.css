@@ -552,8 +552,8 @@ body {
 
 .comment_form {
     display: flex;
+    width: 100%;
     align-items: center;
-    justify-content: space-between;
     gap: 10px;
     padding: 10px;
 }
@@ -562,7 +562,7 @@ body {
     border-radius: 50%;
 }
 
-.comment_input {
+.comment_input form {
     width: 100%;
     border: 1px solid #a3a3a3;
     outline: none;

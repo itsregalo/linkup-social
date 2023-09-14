@@ -53,7 +53,7 @@ const get_posts = async () => {
                         </div>
 
                         <div class="card-body">
-                            <a class="post_link" href="/client/post-detail.html">
+                            <a class="post_link" href="/client/pages/posts/post-detail.html?id=${post.id}">
                                 <div class="caption">
                                     <p>${post.content}</p>
                                 </div>
@@ -93,7 +93,7 @@ const get_posts = async () => {
                             </div>
                         </div>
                         <div class="card-body">
-                            <a class="post_link" href="/client/post-detail.html">
+                            <a class="post_link" href="/client/pages/posts/post-detail.html?id=${post.id}">
                                 <img src="${post.picture}" alt="" width="100%">
                                 <div class="caption">
                                     <p>${post.content}</p>

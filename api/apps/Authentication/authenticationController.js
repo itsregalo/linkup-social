@@ -448,7 +448,7 @@ const checkToken = async (req, res) => {
         }
 
         const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
-
+       
         return res.status(200).json({
             message: "Token is valid"
         });

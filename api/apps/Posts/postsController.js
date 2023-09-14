@@ -478,6 +478,27 @@ const getPostComments = async (req, res) => {
 }
 
 
+const getPostsOfFollowedUsers = async (req, res) => {
+    try {
+        const authenticated_user = req.user;
+
+        const pool = await mssql.connect(sqlConfig);
+
+        // getting posts of followed users
+        const posts = await pool.request()
+            .input('user_id', mssql.VarChar(50), authenticated_user.id)
+            .execute('get_posts_from_users_following_proc');
+
+        return res.status(200).json({
+            posts: posts.recordset
+        });
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+}
+
 
 
 
@@ -491,6 +512,7 @@ module.exports = {
     deletePostController,
     deletePostControllerHard,
     getUserPostsController,
+    getPostsOfFollowedUsers,
 
     likeUnlikePostController
 }

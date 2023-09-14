@@ -56,7 +56,17 @@ CREATE OR ALTER PROCEDURE get_users_not_following_proc
     @user_id VARCHAR(255)
 AS
 BEGIN
-    SELECT * FROM users WHERE id NOT IN (
+    SELECT id, username, email, full_name, location, bio, profile_picture, created_at 
+    FROM users WHERE id NOT IN (
         SELECT following_id FROM following WHERE user_id = @user_id);
 END;
 GO
+
+-- get posts from users a user is following
+CREATE OR ALTER PROCEDURE get_posts_from_users_following_proc
+    @user_id VARCHAR(255)
+AS
+BEGIN
+    SELECT * FROM posts WHERE user_id IN (
+        SELECT following_id FROM following WHERE user_id = @user_id);
+END;
