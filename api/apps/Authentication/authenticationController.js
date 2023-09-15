@@ -14,7 +14,7 @@ const userRegistrationController = async (req, res) => {
         // checking if the fields are empty
         if(!(email && username && full_name && password && repeat_password)) {
             return res.status(400).json({
-                message:"All input is required"
+                message:"All fields are required"
             });
         }
 
