@@ -1,5 +1,7 @@
 const mssql = require('mssql')
 const { v4 } = require('uuid');
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const { userRegistrationController } = require('./authenticationController');
 
 // User registration tests
@@ -76,4 +78,70 @@ describe('User Registration Tests', () => {
 
     })
 
+    // Test 4: Cheking if it raises an error if user already exists
+    it("Should return an error if user already exists", async () => {
+        const req = {
+            body: {
+                email: 'itsregalobin47@gmail.com',
+                username: 'itsregalo',
+                full_name: 'Gift',
+                password: 'Gift1234',
+                repeat_password: 'Gift1234'
+            }
+        }
+
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        }
+
+        jest.spyOn(mssql, 'connect').mockResolvedValueOnce({
+            request: jest.fn().mockReturnThis(),
+            input: jest.fn().mockReturnThis(),
+            execute: jest.fn().mockResolvedValueOnce({
+                rowsAffected: [1]
+            })
+        })
+
+        await userRegistrationController(req, res)
+
+        expect(res.status).toHaveBeenCalledWith(400)
+        expect(res.json).toHaveBeenCalledWith({message:"User already exists"})
+    })
+    
+    // Test 5: Should return a success message if user is created
+    it("Should return a success message if user is created", async () => {
+        const req = {
+            body: {
+                email: 'itsregalobin47@gmail.com',
+                username: 'itsregalo',
+                full_name: 'Gift',
+                password: 'Gift1234',
+                repeat_password: 'Gift1234'
+            }
+        }
+
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        }
+
+        jest.spyOn(mssql, 'connect').mockResolvedValueOnce({
+            request: jest.fn().mockReturnThis(),
+            input: jest.fn().mockReturnThis(),
+            execute: jest.fn().mockResolvedValueOnce({
+                rowsAffected: [0]
+            })
+        })
+
+        jest.spyOn(bcrypt, 'hash').mockResolvedValueOnce('hashedPassword')
+
+        await userRegistrationController(req, res)
+
+        expect(res.status).toHaveBeenCalledWith(500)
+        expect(res.json).toHaveBeenCalledWith({
+            token: expect.any(String),
+            user: expect.any(Object),
+            message:"User created successfully"})
+        })
 })

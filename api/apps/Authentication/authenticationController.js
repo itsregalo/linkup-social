@@ -41,7 +41,7 @@ const userRegistrationController = async (req, res) => {
             .input('email', mssql.VarChar, email)
             .execute('get_user_by_username_or_email_proc');
 
-        if(user.recordset.length > 0) {
+        if(user.rowsAffected[0] !== 0) {
             return res.status(400).json({
                 message: "User already exists"
             });
