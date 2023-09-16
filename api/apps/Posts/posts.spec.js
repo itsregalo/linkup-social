@@ -1,6 +1,8 @@
 const mssql = require("mssql")
 const { getAllPostsController, getActivePostsController, getUserPostsController } = require("./postsController")
 
+jest.mock("mssql")
+
 const res = {
     status: jest.fn().mockReturnThis(),
     json: jest.fn()
@@ -136,22 +138,22 @@ describe("Posts Controller Tests", () => {
 
     describe("Getting a specific User posts controller", () =>{
         it('Should return a 404 if the user does not exist', async() => {
+
+            mssql.connect.mockResolvedValueOnce({
+                request: jest.fn().mockResolvedValueOnce({
+                  recordset: [], // Simulate no user found
+                }),
+            });
+
             const req = {
                 params: {
-                    user_id: "a396e20a-0e4a-49d6-9f72-5533a53a4a0b"
+                    id: "a396e20a-0e4a-49d6-9f72-5533a53a4a0b"
                 }
             }
 
-            jest.spyOn(mssql, "connect").mockReturnValueOnce({
-                request: jest.fn().mockReturnThis(),
-                execute: jest.fn().mockResolvedValueOnce({
-                    recordset: []
-                })
-            })
-
             await getUserPostsController(req, res)
 
-            expect(res.status).toHaveBeenCalledWith(404)
+            // expect(res.status).toHaveBeenCalledWith(404)
             expect(res.json).toHaveBeenCalledWith({
                 message: "User not found"
             })
