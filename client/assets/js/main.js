@@ -1,4 +1,4 @@
-const api_base_url = 'http://127.0.0.1:8000/api'
+const api_base_url = 'https://2f1a-105-55-126-97.ngrok-free.app/api'
 
 
 function changeTheme(){
