@@ -34,14 +34,16 @@ const get_user_profile = async () => {
             user_profile_area.innerHTML = ``;
             user_profile_area.innerHTML += `
             <div class="background_image">
-                <img src="${data.user.background_picture}" alt="" width="100%">
+                <img src="/client/assets/images/users/kotlin_bg.jpg" alt="" width="100%">
                 
             </div>
 
             <div class="profile_photo">
                 <img src="${data.user.profile_picture}" alt="" width="100px" height="100px">
                 <div class="edit_profile_btn">
-                    <button type="button" class="btn btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModalLong">Edit Profile</button>
+                    <a href="/client/pages/profile/update-profile.html" class="btn btn btn-outline-primary">
+                        Edit Profile
+                    </a>
                 </div>
             </div>
             
@@ -58,7 +60,7 @@ const get_user_profile = async () => {
                 <div class="location_date_joined">
                     <div class="location">
                         <img src="/client/assets/images/icons/location.svg" alt="">
-                        <a href="">Nairobi, Kenya</a>
+                        <a href="">${data.user.location}</a>
                     </div>
                     <div class="date_joined">
                         <img src="/client/assets/images/icons/calender.svg" alt="">
@@ -88,8 +90,6 @@ const get_user_profile = async () => {
             the_posts.sort((a, b) => {
                 return new Date(b.post_date) - new Date(a.post_date);
             });
-
-            
             user_posts_div.innerHTML = ``;
 
             the_posts.forEach(post => {
@@ -151,7 +151,7 @@ const get_user_profile = async () => {
                             <a class="post_link" href="">
                                 <img src="${post.picture}" alt="" width="100%">
                                 <div class="caption">
-                                    <p>Next Level #Trump</p>
+                                    <p>${post.content}</p>
                                 </div>
                             </a>
                         </div>
@@ -197,5 +197,6 @@ const get_user_profile = async () => {
         }
     }
 }
+
 
 get_user_profile();

@@ -71,12 +71,22 @@ const get_posts = async () => {
                                     <p>Like</p>
                                 </div>
                                 <div class="comment">
-                                    <img src="/client/assets/images/icons/comment-outline.svg" alt="">
+                                    <a href="/client/pages/posts/post-detail.html?id=${post.id}">
+                                        <img src="/client/assets/images/icons/comment-outline.svg" alt="">
+                                    </a>
                                     <p>Comment</p>
                                 </div>
-                                <div class="share">
-                                    <img src="/client/assets/images/icons/share-24.svg" alt="">
-                                    <p>Share</p>
+                                <div class="edit">
+                                    <a href="/client/pages/posts/edit-post.html?id=${post.id}">
+                                        <img src="/client/assets/images/icons/edit.svg" alt="">
+                                    </a>
+                                    <p>Edit</p>
+                                </div>
+                                <div class="delete">
+                                    <a href="/client/pages/posts/delete-post.html?id=${post.id}">
+                                        <img src="/client/assets/images/icons/delete.svg" alt="">
+                                    </a>
+                                    <p>Delete</p>
                                 </div>
                             </div>
                         </div>
@@ -116,12 +126,22 @@ const get_posts = async () => {
                                     <p>Like</p>
                                 </div>
                                 <div class="comment">
-                                    <img src="/client/assets/images/icons/comment-outline.svg" alt="">
+                                    <a href="/client/pages/posts/post-detail.html?id=${post.id}">
+                                        <img src="/client/assets/images/icons/comment-outline.svg" alt="">
+                                    </a>
                                     <p>Comment</p>
                                 </div>
-                                <div class="share">
-                                    <img src="/client/assets/images/icons/share-24.svg" alt="">
-                                    <p>Share</p>
+                                <div class="edit">
+                                    <a href="/client/pages/posts/edit-post.html?id=${post.id}">
+                                        <img src="/client/assets/images/icons/edit.svg" alt="">
+                                    </a>
+                                    <p>Edit</p>
+                                </div>
+                                <div class="delete">
+                                    <a href="/client/pages/posts/delete-post.html?id=${post.id}">
+                                        <img src="/client/assets/images/icons/delete.svg" alt="">
+                                    </a>
+                                    <p>Delete</p>
                                 </div>
                             </div>
     

@@ -378,7 +378,7 @@ body {
     padding: 0px 10px 0px 10px;
 }
 
-.like, .comment, .share {
+.like, .comment, .share, .delete, .edit {
     display: flex;
     gap: 5px;
     padding: 0px 10px 0px 10px;
