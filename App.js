@@ -8,6 +8,7 @@ const commentRouter = require('./api/apps/Comments/CommentsRouter');
 const followersRouter = require('./api/apps/Followers/followersRouter');
 const postsRouter = require('./api/apps/Posts/postsRouter');
 const profileRouter = require('./api/apps/Profile/profileRouter');
+const likesRouter = require('./api/apps/likes/likesRouter');
 
 require('dotenv').config();
 
@@ -35,6 +36,9 @@ app.use('/api/followers', followersRouter);
 
 // posts
 app.use('/api/posts', postsRouter);
+
+//likes
+app.use('/api/likes', likesRouter);
 
 // user profile
 app.use('/api/user', profileRouter);
