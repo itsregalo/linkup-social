@@ -1,5 +1,5 @@
-import { get_user_details } from "/client/assets/js/modules.js"
-const base_url = 'https://2f1a-105-55-126-97.ngrok-free.app/api'
+import { get_user_details, user_has_liked_post } from "/client/assets/js/modules.js"
+const base_url = 'http://127.0.0.1:8000/api'
 
 const token = localStorage.getItem('token');
 const user = JSON.parse(localStorage.getItem('user'));
@@ -11,6 +11,7 @@ if (!token) {
 }  else {
     const is_authenticated = true;
 }
+
 
 
 // getting a ist of all posts from the database
@@ -33,17 +34,20 @@ const get_posts = async () => {
                 return new Date(b.post_date) - new Date(a.post_date);
             });
                 
-            post_array.forEach((post,index)=>{
+            post_array.forEach(async (post,index)=>{
 
-                const user_det = get_user_details(post.user_id);
-
+                const user_det = await get_user_details(post.user_id);
+               
+                const isLiked = await user_has_liked_post(post.id)
+                
+               
                 if (!post.picture) {
                     posts_div.innerHTML += `
                     <div class="card post_card">
                         <div class="card-header post_head">
                             <div class="profile_pic_user">
-                                <img src="/client/assets/images/users/itsregalo.jpg" alt="" width="50px" height="50px">
-                                <p>GiftM</p>
+                                <img src="${user_det.user.profile_picture}" alt="" width="50px" height="50px">
+                                <p>${user_det.user.full_name}</p>
                             </div>
 
                             <div class="daysince_more_options">
@@ -63,7 +67,7 @@ const get_posts = async () => {
                         <div class="card-footer">
                             <div class="like_comment_share">
                                 <div class="like">
-                                    <img src="/client/assets/images/icons/like-outline.svg" alt="">
+                                    <img src="/client/assets/images/icons/like-outline.svg" alt="" onclick="likeOrUnlikePost('${post.id}')">
                                     <p>Like</p>
                                 </div>
                                 <div class="comment">
@@ -78,14 +82,19 @@ const get_posts = async () => {
                         </div>
                     </div>
                     `;
+
+                    if (isLiked) {
+                        document.querySelectorAll('.like img')[index].src = "/client/assets/images/icons/liked.svg";
+                    }
+
                 } else {
                     posts_div.innerHTML += `
                     <div class="card post_card">
                         <div class="card-header post_head">
-                            <div class="profile_pic_user">
-                                <img src="/client/assets/images/users/itsregalo.jpg" alt="" width="50px" height="50px">
-                                <p>GiftM</p>
-                            </div>
+                        <div class="profile_pic_user">
+                            <img src="${user_det.user.profile_picture}" alt="" width="50px" height="50px">
+                            <p>${user_det.user.full_name}</p>
+                        </div>
     
                             <div class="daysince_more_options">
                                 <p>12 mins</p>
@@ -103,7 +112,7 @@ const get_posts = async () => {
                         <div class="card-footer">
                             <div class="like_comment_share">
                                 <div class="like">
-                                    <img src="/client/assets/images/icons/like-outline.svg" alt="">
+                                    <img src="/client/assets/images/icons/like-outline.svg" alt="" onclick="likeOrUnlikePost('${post.id}')">
                                     <p>Like</p>
                                 </div>
                                 <div class="comment">
@@ -119,6 +128,10 @@ const get_posts = async () => {
                         </div>
                     </div>
                     `;
+
+                    if (isLiked) {
+                        document.querySelectorAll('.like img')[index].src = "/client/assets/images/icons/liked.svg";
+                    }
                 }
             })
         }

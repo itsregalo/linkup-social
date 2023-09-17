@@ -156,11 +156,42 @@ const suggestFollowers = async (req, res) => {
     }
 }
 
+const checkIfUserFollowed = async (req, res) => {
+    try {
+        const authenticated_user = req.user;
+        const {id} = req.params;
+
+        const pool = await mssql.connect(sqlConfig);
+
+        // check if user is already followed
+        const user_followed = await pool.request()
+            .input('user_id', mssql.VarChar(50), id)
+            .input('follower_id', mssql.VarChar(50), authenticated_user.id)
+            .execute('check_is_followed_proc');
+
+        if(user_followed.recordset.length > 0) {
+            return res.status(200).json({
+                message: 'User followed',
+                followed: true
+            });
+        } else {
+            return res.status(200).json({
+                message: 'User not followed',
+                followed: false
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+}
 
 module.exports = {
     getUserFollowersController,
     getUserFollowingController,
     followUnfollowUserController,
     getUsersNotFollowingController,
-    suggestFollowers
+    suggestFollowers,
+    checkIfUserFollowed
 }

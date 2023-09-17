@@ -1,7 +1,15 @@
+import { if_user_followed } from "../../assets/js/modules.js";
 const base_url = 'http://127.0.0.1:8000/api'
 
+
 const token = localStorage.getItem('token');
-const user = JSON.parse(localStorage.getItem('user'));
+
+// getting user from url 
+const user_id = window.location.search.split('=')[1];
+
+console.log(user_id);
+
+// const user = JSON.parse(localStorage.getItem('user'));
 const message_div = document.querySelector('.message');
 
 if (!token) {
@@ -12,7 +20,7 @@ if (!token) {
 
 const get_user_profile = async () => {
     try {
-        const response = await fetch(`${base_url}/user/profile/${user.id}`, {
+        const response = await fetch(`${base_url}/user/profile/${user_id}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': token
@@ -20,10 +28,12 @@ const get_user_profile = async () => {
         });
 
         const data = await response.json();
-        console.log(data);
+
         if (data.error == 'jwt expired') {
             window.location.href = "/client/pages/auth/login.html"
         }
+
+        const isFollowed = await if_user_followed(user_id)
 
         if (data.user && response.status === 200) {
             const profile_username = document.querySelector('#profile_username');
@@ -41,7 +51,7 @@ const get_user_profile = async () => {
             <div class="profile_photo">
                 <img src="${data.user.profile_picture}" alt="" width="100px" height="100px">
                 <div class="edit_profile_btn">
-                    <button type="button" class="btn btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModalLong">Edit Profile</button>
+                    <button type="button" class="btn btn btn-outline-primary">Follow</button>
                 </div>
             </div>
             
@@ -51,7 +61,7 @@ const get_user_profile = async () => {
                 <p>Software Developer</p>
 
                 <div class="user_bio">
-                    Tech Bro ✌️ 
+                    Tech Br ✌️ 
                     Scrap Restorations 🔧
                     Wannabe Drag Racer 🏎
                 </div>
@@ -69,15 +79,19 @@ const get_user_profile = async () => {
                 <div class="user_follow_followers">
                     <div class="following_count">
                         <span class="count">${data.user_following.length}</span>
-                        <a href="/client/pages/followers/following.html" class="light_link">Following</a>
+                        <a href="/client/followers.html" class="light_link">Following</a>
                     </div>
                     <div class="followers_count">
                         <span class="count">${data.user_followers.length}</span>
-                        <a href="/client/pages/followers/followers.html" class="light_link">Followers</a>
+                        <a href="/client/pages/followers/followers.html=?${user_id}" class="light_link">Followers</a>
                     </div>
                 </div>
             </div>
             `;
+
+            if(isFollowed){
+                document.querySelector('')
+            }
         }
         const user_posts_div = document.querySelector('#user_posts');
 
@@ -98,8 +112,8 @@ const get_user_profile = async () => {
                         <div class="card post_card">
                             <div class="card-header post_head">
                                 <div class="profile_pic_user">
-                                    <img src="${data.user.profile_picture}" alt="" width="50px" height="50px">
-                                    <p>${data.user.full_name}</p>
+                                    <img src="/client/assets/images/users/elon.jpg" alt="" width="50px" height="50px">
+                                    <p>GiftM</p>
                                 </div>
         
                                 <div class="daysince_more_options">

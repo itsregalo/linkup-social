@@ -158,36 +158,12 @@
     
                     <div class="friends-suggestion">
                         <h5>Suggested Friends</h5>
-                        <div class="suggestions_container">
-                            <div class="single_suggested_user">
-                                <div class="suggested-profile">
-                                    <img src="/client/assets/images/users/elon.jpg" alt="" width="50px" height="50px">
-                                    <div class="user_name_handle">
-                                        <h6>GiftM</h6>
-                                        <p>@elonmusk</p> 
-                                    </div>
-                                </div>
-                                <div class="follow_button_suggested">
-                                    <button class="btn btn-outline-primary">Follow</button>
-                                </div>
-                            </div>
-    
-                            <div class="single_suggested_user">
-                                <div class="suggested-profile">
-                                    <img src="/client/assets/images/users/elon.jpg" alt="" width="50px" height="50px">
-                                    <div class="user_name_handle">
-                                        <h6>GiftM</h6>
-                                        <p>@elonmusk</p> 
-                                    </div>
-                                </div>
-                                <div class="follow_button_suggested">
-                                    <button class="btn btn-outline-primary">Follow</button>
-                                </div>
-                            </div>
+                        <div class="suggestions_container" id="suggested_users">
+                            
                         </div>
     
                         <div class="show_more">
-                            <a href="#">Show More</a>
+                            <a href="/client/pages/followers/follow-suggestions.html">Show More</a>
                         </div>
                     </div>
     
@@ -291,6 +267,9 @@
     <script src="/client/assets/js/main.js"></script>
     <script src="/client/pages/profile/profile.js"></script>
     <script>
+        window.addEventListener('load', ()=>{
+            get_suggested_users()
+        })
     </script>
 </body>
 </html>

@@ -63,7 +63,7 @@
                                     <img src="/client/assets/images/icons/news.svg" alt="">
                                     <a href="/client/pages/posts/category-list.html">News</a>
                                 </div>
-                            </div>
+                            </div> 
                         </div>
                     </div>
                 </div>
@@ -161,47 +161,27 @@
     
                 <div class="col-3 most-right">
                     <div class="new_post">
-                        <form class="new_post_form" action="" method="post">
-                            <textarea name="" id="" cols="30" rows="5" placeholder="What's on your mind?"></textarea>
+                        <form class="new_post_form" action="" method="post" id="new_post_form" enctype="multipart/form-data">
+                            <select name="" id="create_post_cats">
+                                
+        
+                            </select>
+                            <textarea name="content" id="form_post_content" cols="30" rows="5" placeholder="What's on your mind?"></textarea>
                             <div class="bottom_inputs">
-                                <input type="file" name="" id="" class="add_image_to_post">
-                                <button class="btn" type="submit">Post</button>
+                                <input type="file" name="picture" id="form_post_picture" class="add_image_to_post" accept="image/*">
+                                <button class="btn btn-sm" type="submit">Post</button>
                             </div>
                         </form>
                     </div>
     
                     <div class="friends-suggestion">
                         <h5>Suggested Friends</h5>
-                        <div class="suggestions_container">
-                            <div class="single_suggested_user">
-                                <div class="suggested-profile">
-                                    <img src="/client/assets/images/users/itsregalo.jpg" alt="" width="50px" height="50px">
-                                    <div class="user_name_handle">
-                                        <h6>GiftM</h6>
-                                        <p>@itsregalo</p> 
-                                    </div>
-                                </div>
-                                <div class="follow_button_suggested">
-                                    <button class="btn btn-outline-primary">Follow</button>
-                                </div>
-                            </div>
-    
-                            <div class="single_suggested_user">
-                                <div class="suggested-profile">
-                                    <img src="/client/assets/images/users/itsregalo.jpg" alt="" width="50px" height="50px">
-                                    <div class="user_name_handle">
-                                        <h6>GiftM</h6>
-                                        <p>@itsregalo</p> 
-                                    </div>
-                                </div>
-                                <div class="follow_button_suggested">
-                                    <button class="btn btn-outline-primary">Follow</button>
-                                </div>
-                            </div>
+                        <div class="suggestions_container" id="suggested_users">
+                            
                         </div>
     
                         <div class="show_more">
-                            <a href="#">Show More</a>
+                            <a href="/client/pages/followers/follow-suggestions.html">Show More</a>
                         </div>
                     </div>
     
@@ -275,5 +255,13 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     <script src="/client/assets/js/main.js"></script>
+    <script type="module" src="/client/pages/posts/category_list.js"></script>
+    <script src="/client/pages/posts/create_post.js"></script>
+    <script>
+        window.addEventListener('load', ()=> {
+            get_suggested_users()
+        })
+    </script>
+
 </body>
 </html>

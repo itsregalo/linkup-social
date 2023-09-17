@@ -1,4 +1,4 @@
-const api_base_url = 'https://2f1a-105-55-126-97.ngrok-free.app/api'
+const api_base_url = 'http://127.0.0.1:8000/api'
 
 
 function changeTheme(){
@@ -55,8 +55,6 @@ const get_suggested_users = async () => {
     }
 }
 
-
-
 const followOrUnfollow = async (user_id) => {
     try {
         const response = await fetch(`${base_url}/followers/user/${user_id}/follow`, {
@@ -101,6 +99,65 @@ const followOrUnfollow = async (user_id) => {
         console.log(error);
     }
 }
+
+const likeOrUnlikePost = async (post_id) => {
+    try {
+        const response = await fetch(`${base_url}/posts/${post_id}/like`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            }
+        });
+
+        const data = await response.json();
+        console.log(data);
+        if (data.error == 'jwt expired') {
+            window.location.href = "/client/pages/auth/login.html"
+        }
+    } catch (error) {
+        
+    }
+}
+
+const get_categories = async () => {
+    try {
+        const response = await fetch(`${api_base_url}/categories/post/categories`, {
+            headers: {
+                'Content-Type':"application/json"
+            }
+        });
+
+        const data = await response.json()
+        
+
+        if(response.ok){
+            const categoriesDiv = document.querySelector('.topic-links')
+            const form_select = document.querySelector('#create_post_cats')
+
+            const categories = data.categories
+            categoriesDiv.innerHTML = ``;
+
+            categories.forEach((cat,index)=>{
+                categoriesDiv.innerHTML += `
+                    <div class="topic-item">
+                        <img src="/client/assets/images/icons/game-2-fill.svg" alt="">
+                        <a href="/client/pages/posts/category-list.html?=${cat.id}">${cat.name}</a>
+                    </div>
+                `;
+                form_select.innerHTML += `
+                    <option value="${cat.id}">${cat.name}</option>
+                `;
+
+            })
+        }
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+get_categories()
 
 window.addEventListener('load', function(){
     document.querySelector('.loader').style.display = 'none';

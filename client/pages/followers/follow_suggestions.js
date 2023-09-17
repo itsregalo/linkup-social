@@ -1,3 +1,5 @@
+import { if_user_followed } from "../../assets/js/modules.js"
+
 const base_url = 'http://127.0.0.1:8000/api'
 
 const token = localStorage.getItem('token');
@@ -29,7 +31,9 @@ const get_users_not_following = async () => {
             const users_container = document.querySelector('#not_following_container');
             users_container.innerHTML = '';
 
-            users.forEach(user => {
+            users.forEach(async user => {
+                const user_followed = await if_user_followed(user.id);
+                console.log(user_followed);
                 const user_bio = user.bio ? user.bio : 'No bio yet';
                 users_container.innerHTML += `
                 <div class="single_follower">
@@ -38,7 +42,7 @@ const get_users_not_following = async () => {
                             <img src="${user.profile_picture}" alt="" width="50px" height="50px">
                             <div class="follower_user_info">
                                 <div class="user_name_handle">
-                                    <a href="">
+                                    <a href="/client/pages/profile/user-profile.html?id=${user.id}">
                                         <h6>${user.full_name}</h6>
                                         <p>@${user.username}</p>
                                     </a> 
@@ -59,6 +63,14 @@ const get_users_not_following = async () => {
                     </div>
                 </div>
                 `;
+
+                if (user_followed) {
+                    document.querySelector(`#follow_btn_div_${user.id}`).innerHTML = `
+                    <button class="btn btn-primary" id="follow_btn_${user.id}" onclick="followOrUnfollow('${user.id}')">
+                        Unfollow
+                    </button>
+                    `;
+                }
             });
         }
     } catch (error) {

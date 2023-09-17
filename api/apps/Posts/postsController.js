@@ -133,8 +133,9 @@ const getPostDetailsController = async (req, res) => {
 const createPostController = async (req, res) => {
     try {
         const authenticated_user = req.user;
-        let {picture, content, caregory_id} = req.body;
+        let {picture, content, category_id} = req.body;
         const post_id = v4();
+        
 
         // content is required
         if (!content) {
@@ -145,15 +146,15 @@ const createPostController = async (req, res) => {
 
         const pool = await mssql.connect(sqlConfig);
 
-        if(!caregory_id) {
+        if(!category_id) {
             const default_category = await pool.request()
                 .execute('get_default_category_proc');
-            caregory_id = default_category.recordset[0].id;
+            category_id = default_category.recordset[0].id;
         }
 
         // checking if the category exist, if not
         const category = await pool.request()
-            .input('id', mssql.VarChar, caregory_id)
+            .input('id', mssql.VarChar, category_id)
             .execute('get_category_by_id_proc');
 
         if (category.recordset.length === 0) {
@@ -199,7 +200,7 @@ const createPostController = async (req, res) => {
             .input('picture', mssql.VarChar, picture)
             .input('content', mssql.VarChar, content)
             .input('user_id', mssql.VarChar, authenticated_user.id)
-            .input('category_id', mssql.VarChar, caregory_id)
+            .input('category_id', mssql.VarChar, category_id)
             .execute('create_post_proc');
 
         return res.status(201).json({
@@ -220,7 +221,7 @@ const updatePostController = async (req, res) => {
         const authenticated_user = req.user;
         const {id} = req.params;
 
-        let {picture, content, caregory_id} = req.body;
+        let {picture, content, category_id} = req.body;
 
         // content is required
         if (!content) {
@@ -250,15 +251,15 @@ const updatePostController = async (req, res) => {
         }
 
         // checking if the category exist, if not use the default category
-        if (!caregory_id) {
+        if (!category_id) {
             const default_category = await pool.request()
                 .execute('get_default_category_proc');
-            caregory_id = default_category.recordset[0].id;
+            category_id = default_category.recordset[0].id;
         }
 
         // checking if the category exist
         const category = await pool.request()
-            .input('id', mssql.VarChar, caregory_id)
+            .input('id', mssql.VarChar, category_id)
             .execute('get_category_by_id_proc');
 
         if (category.recordset.length === 0) {
@@ -292,7 +293,7 @@ const updatePostController = async (req, res) => {
             .input('id', mssql.VarChar, id)
             .input('picture', mssql.VarChar, picture)
             .input('content', mssql.VarChar, content)
-            .input('category_id', mssql.VarChar, caregory_id)
+            .input('category_id', mssql.VarChar, category_id)
             .execute('update_post_proc');
 
         return res.status(200).json({
@@ -499,9 +500,6 @@ const getPostsOfFollowedUsers = async (req, res) => {
     }
 }
 
-
-
-
 module.exports = {
     createPostController,
     getAllPostsController,
@@ -514,5 +512,5 @@ module.exports = {
     getUserPostsController,
     getPostsOfFollowedUsers,
 
-    likeUnlikePostController
+    likeUnlikePostController,
 }
