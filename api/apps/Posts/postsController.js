@@ -248,26 +248,6 @@ const updatePostController = async (req, res) => {
             });
         }
 
-        // checking if the user has uploaded a picture
-        if (picture) {
-            const cloudinaryOptions = {
-                use_filename: true,
-                unique_filename: false,
-                overwrite: true,
-                resource_type: "auto"
-            };
-            // uploading the picture to cloudinary
-            const uploadedPicture = await cloudinary.uploader.upload(picture, cloudinaryOptions, (error, result) => {
-                if (error) {
-                    return res.status(500).json({
-                        error: error
-                    });
-                }
-            });
-
-            picture = uploadedPicture.secure_url;
-        }
-
         // updating the post
         const updatedPost = await pool.request()
             .input('id', mssql.VarChar, id)
