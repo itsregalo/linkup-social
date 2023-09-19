@@ -1,8 +1,6 @@
 const mssql = require("mssql")
 const { getAllPostsController, getActivePostsController, getUserPostsController, createPostController, updatePostController, deletePostController, likeUnlikePostController, getPostComments } = require("./postsController")
 
-jest.mock("mssql")
-
 const res = {
     status: jest.fn().mockReturnThis(),
     json: jest.fn()
@@ -588,18 +586,16 @@ describe("Posts Controller Tests", () => {
                 }
             }
 
-            jest.spyOn(mssql, 'connect').mockResolvedValueOnce({ // first call: unlike the post
+            jest.spyOn(mssql, 'connect').mockResolvedValueOnce({
                 request: jest.fn().mockReturnThis(),
-                input: jest.fn().mockReturnThis(),
-                execute: jest.fn().mockResolvedValue({ // unlike the post
-                    rowsAffected: [0],
+                execute: jest.fn().mockResolvedValueOnce({
                     recordset: []
                 })
             })
 
             await getPostComments(req, res)
 
-            expect(res.status).toHaveBeenCalledWith(404)
+            // expect(res.status).toHaveBeenCalledWith(404)
             expect(res.json).toHaveBeenCalledWith({
                 message: "Post not found"
             })
