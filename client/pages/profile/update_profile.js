@@ -35,7 +35,6 @@ const get_user_profile = async () => {
             user_profile_area.innerHTML += `
             <div class="background_image">
                 <img src="/client/assets/images/users/kotlin_bg.jpg" alt="" width="100%">
-                
             </div>
 
             <div class="profile_photo">
@@ -50,12 +49,10 @@ const get_user_profile = async () => {
             <div class="user_info">
                 <h6>${data.user.full_name}</h6>
                 <p>@${data.user.username}</p>
-                <p>Software Developer</p>
+               
 
                 <div class="user_bio">
-                    Tech Bro ✌️ 
-                    Scrap Restorations 🔧
-                    Wannabe Drag Racer 🏎
+                    
                 </div>
                 <div class="location_date_joined">
                     <div class="location">
@@ -135,9 +132,9 @@ update_profile_form.addEventListener('submit', async (e) => {
             profile_picture: profile_picture_url
         }
 
-        console.log(form_data);
-
         update_profile(form_data);
+
+        window.location.href = "/client/pages/profile/profile.html"
     });
 });
 
@@ -153,8 +150,7 @@ const update_profile = async (form_data) => {
         });
 
         const data = await response.json();
-        console.log(data);
-
+    
         if (data.user && response.status === 200) {
             window.location.href = "/client/pages/profile/profile.html"
         }

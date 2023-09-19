@@ -385,6 +385,13 @@ body {
     cursor: pointer;
 }
 
+.edit a {
+    display: flex;
+    gap: 5px;
+    padding: 0px 10px 0px 10px;
+    cursor: pointer; 
+}
+
 /* Profile */
 .profile_area {
     width: 100%;

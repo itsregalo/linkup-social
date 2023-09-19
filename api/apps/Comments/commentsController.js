@@ -24,7 +24,7 @@ const addCommentToPostController = async (req, res) => {
         const post = await pool.request()
             .input('id', mssql.VarChar, id)
             .execute('get_post_by_id_proc');
-
+        
         if (post.recordset.length === 0) {
             return res.status(404).json({
                 message: 'Post not found'
@@ -38,6 +38,8 @@ const addCommentToPostController = async (req, res) => {
             .input('user_id', mssql.VarChar, authenticated_user.id)
             .input('post_id', mssql.VarChar, id)
             .execute('add_post_comment_proc');
+
+        console.log(addedComment);
 
         return res.status(200).json({
             message: 'Comment added successfully',

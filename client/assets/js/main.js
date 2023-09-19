@@ -141,7 +141,7 @@ const get_categories = async () => {
             categories.forEach((cat,index)=>{
                 categoriesDiv.innerHTML += `
                     <div class="topic-item">
-                        <img src="/client/assets/images/icons/game-2-fill.svg" alt="">
+                       
                         <a href="/client/pages/posts/category-list.html?=${cat.id}">${cat.name}</a>
                     </div>
                 `;
@@ -152,6 +152,88 @@ const get_categories = async () => {
             })
         }
 
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const delete_post = async (id) => {
+    try {
+        const response = await fetch(`${base_url}/posts/delete/s/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            }
+        });
+
+        const result = await response.json();
+        console.log(result);
+        if (response.status === 200) {
+            message_div.innerHTML = `
+                <div class="alert alert-success" role="alert">
+                    ${result.message}
+                </div>
+            `;
+            setTimeout(() => {
+                message_div.innerHTML = ``;
+            }, 2000);
+            window.location.href = "/client/pages/posts/posts.html"
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+const checkIfUserOwnsPost = async (id) => {
+    try {
+        const response = await fetch(`${base_url}/posts/user/check-owner/current/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            }
+        });
+
+        const result = await response.json();
+        console.log(result);
+        if (response.status === 200) {
+            return result;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const update_post = async (id) => {
+    try {
+        const response = await fetch(`${base_url}/posts/update/s/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            body: JSON.stringify({
+                title: title.value,
+                content: content.value,
+                category_id: category_id.value
+            })
+        });
+
+        const result = await response.json();
+        console.log(result);
+        if (response.status === 200) {
+            message_div.innerHTML = `
+                <div class="alert alert-success" role="alert">
+                    ${result.message}
+                </div>
+            `;
+            setTimeout(() => {
+                message_div.innerHTML = ``;
+            }, 2000);
+            window.location.href = "/client/pages/posts/posts.html"
+        }
     } catch (error) {
         console.log(error);
     }

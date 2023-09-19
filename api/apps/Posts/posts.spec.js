@@ -1,5 +1,5 @@
 const mssql = require("mssql")
-const { getAllPostsController, getActivePostsController, getUserPostsController } = require("./postsController")
+const { getAllPostsController, getActivePostsController, getUserPostsController, createPostController, updatePostController } = require("./postsController")
 
 jest.mock("mssql")
 
@@ -10,7 +10,11 @@ const res = {
 
 // Test 1: Testing that the posts are returned
 describe("Posts Controller Tests", () => {
+    afterEach(() => {
+        jest.clearAllMocks()
+    })
     describe("Testing Get Posts Tests", ()=> {
+       
         it("Should return a list of posts", async() => {
             const post_list = [
                 {
@@ -137,28 +141,180 @@ describe("Posts Controller Tests", () => {
     })
 
     describe("Getting a specific User posts controller", () =>{
+        afterEach(() => {
+            jest.clearAllMocks()
+        })
         it('Should return a 404 if the user does not exist', async() => {
 
-            mssql.connect.mockResolvedValueOnce({
-                request: jest.fn().mockResolvedValueOnce({
-                  recordset: [], // Simulate no user found
-                }),
-            });
-
-            const req = {
+           const req = {
                 params: {
                     id: "a396e20a-0e4a-49d6-9f72-5533a53a4a0b"
                 }
             }
 
+            jest.spyOn(mssql, 'connect').mockResolvedValueOnce({
+                request: jest.fn().mockReturnThis(),
+                input: jest.fn().mockReturnThis(),
+                execute: jest.fn().mockResolvedValueOnce({
+                    recordset: []
+                })
+            })
+
             await getUserPostsController(req, res)
 
-            // expect(res.status).toHaveBeenCalledWith(404)
+            expect(res.status).toHaveBeenCalledWith(404)
             expect(res.json).toHaveBeenCalledWith({
                 message: "User not found"
             })
 
         })
+
+        it('Should return a list of posts', async() => {
+            const user_posts = [
+                {
+                    "id": "5fdeb4bc-dcd7-4fc3-bf83-4751321b9251",
+                    "user_id": "0dceaaad-20ef-4e33-a9c1-b6d7377de811",
+                    "picture": null,
+                    "content": "A new post here",
+                    "category_id": "c2f9453b-3731-4a12-a38d-8259d2e583de",
+                    "post_date": "2023-09-18T16:52:59.310Z",
+                    "updated_at": "2023-09-18T16:53:11.860Z",
+                    "is_deleted": false
+                },
+                {
+                    "id": "fba4e447-484b-4bfa-90f8-52563630e33a",
+                    "user_id": "0dceaaad-20ef-4e33-a9c1-b6d7377de811",
+                    "picture": null,
+                    "content": "A new movie here Will display",
+                    "category_id": "c2f9453b-3731-4a12-a38d-8259d2e583de",
+                    "post_date": "2023-09-18T16:53:41.323Z",
+                    "updated_at": "2023-09-18T16:54:07.737Z",
+                    "is_deleted": false
+                }
+            ]
+
+            const req = {
+                params: {
+                    id: "0dceaaad-20ef-4e33-a9c1-b6d7377de811"
+                }
+            }
+
+            jest.spyOn(mssql, 'connect').mockResolvedValueOnce({
+                request: jest.fn().mockReturnThis(),
+                input: jest.fn().mockReturnThis(),
+                execute: jest.fn().mockResolvedValueOnce({
+                    recordset: user_posts
+                })
+            })
+
+            await getUserPostsController(req, res)
+
+            expect(res.status).toHaveBeenCalledWith(200)
+            // expect(res.json).toHaveBeenCalledWith({
+            //     posts: user_posts
+            // })
+        })
     })
+
+    describe("Creating a Oist Controller", () => {
+        it("Should create an error if post's content is not provided", async() => {
+            const req = {
+                body: {
+                    content: "",
+                },
+                user: {
+                    id: "0dceaaad-20ef-4e33-a9c1-b6d7377de811"
+                }
+            }
+
+            await createPostController(req, res)
+
+            expect(res.status).toHaveBeenCalledWith(400)
+            expect(res.json).toHaveBeenCalledWith({
+                message: "Content is required"
+            })      
+        });
+
+        it("Should create a post if all the required fields are provided", async() => {
+            const content_body = {
+                content: "A new post here",
+                category_id: "c2f9453b-3731-4a12-a38d-8259d2e583de",
+                picture: null
+            } 
+            
+            const req = {
+                body: content_body,
+                user: {
+                    id: "0dceaaad-20ef-4e33-a9c1-b6d7377de811"
+                }
+            }
+
+            jest.spyOn(mssql, 'connect').mockResolvedValueOnce({
+                request: jest.fn().mockReturnThis(),
+                input: jest.fn().mockReturnThis(),
+                execute: jest.fn().mockResolvedValueOnce({
+                    rowsAffected: [1],
+                    recordset: [
+                        content_body
+                    ]
+
+                })
+            })
+
+            await createPostController(req, res)
+
+            expect(res.status).toHaveBeenCalledWith(201)
+            expect(res.json).toHaveBeenCalledWith({
+                message: "Post created successfully"
+            })
+        })
+    })
+
+    describe("Updating a Post Controller", () => {
+        it("Should update successfully if all the required fields are provided", async() => {
+            const post_id = "a264e708-2994-46b3-9b42-random"
+            const post_body = {
+                "id": "a264e708-2994-46b3-9b42-random",
+                "user_id": "a396e20a-0e4a-49d6-9f72-random",
+                "picture": "https://res.cloudinary.com/ddv1q5oiq/raw/upload/v1694437266/1",
+                "content": "Await a second e!",
+                "category_id": "c2f9453b-3731-4a12-a38d-8259d2e583de",
+                "post_date": "2023-09-07T10:43:08.343Z",
+                "updated_at": "2023-09-11T16:01:05.127Z",
+                "is_deleted": null
+            }
+
+            const req = {
+                params: {
+                    id: post_id
+                },
+                body: {
+                    content: "Await a second e, Edited one!",
+                },
+                user: {
+                    id: "a396e20a-0e4a-49d6-9f72-random"
+                }
+            }
+
+            jest.spyOn(mssql, 'connect').mockResolvedValueOnce({
+                request: jest.fn().mockReturnThis(),
+                input: jest.fn().mockReturnThis(),
+                execute: jest.fn().mockResolvedValueOnce({
+                    rowsAffected: [1],
+                    recordset: [1,1]
+                })
+            })
+
+            await updatePostController(req, res)
+
+            // expect(res.status).toHaveBeenCalledWith(200)
+            expect(res.json).toHaveBeenCalledWith({
+                message: "Post updated successfully"
+            })
+        })
+    })
+
+
+
 
 })

@@ -12,8 +12,6 @@ if (!token) {
     const is_authenticated = true;
 }
 
-
-
 // getting a ist of all posts from the database
 const get_posts = async () => {
     try {
@@ -40,6 +38,7 @@ const get_posts = async () => {
                
                 const isLiked = await user_has_liked_post(post.id)
                 
+                const userOwns = user_det.user.id == user.id;
                
                 if (!post.picture) {
                     posts_div.innerHTML += `
@@ -47,7 +46,7 @@ const get_posts = async () => {
                         <div class="card-header post_head">
                             <div class="profile_pic_user">
                                 <img src="${user_det.user.profile_picture}" alt="" width="50px" height="50px">
-                                <p>${user_det.user.full_name}</p>
+                                <p>${user_det.user.full_name} @${user_det.user.username}</p>
                             </div>
 
                             <div class="daysince_more_options">
@@ -76,17 +75,42 @@ const get_posts = async () => {
                                     </a>
                                     <p>Comment</p>
                                 </div>
+                                
                                 <div class="edit">
                                     <a href="/client/pages/posts/edit-post.html?id=${post.id}">
                                         <img src="/client/assets/images/icons/edit.svg" alt="">
+                                        <p>Edit</p>
                                     </a>
-                                    <p>Edit</p>
                                 </div>
+
                                 <div class="delete">
-                                    <a href="/client/pages/posts/delete-post.html?id=${post.id}">
+                                    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#deleteModal-${post.id}">
                                         <img src="/client/assets/images/icons/delete.svg" alt="">
-                                    </a>
-                                    <p>Delete</p>
+                                        Delete
+                                    </button>
+
+                                    <div class="modal fade" id="deleteModal-${post.id}" tabindex="-1" aria-labelledby="deleteModal-${post.id}Label" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="deleteModal-${post.id}Label">Delete Post</h5>
+                                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Are you sure you want to delete this post?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="button" class="btn btn-danger" id="delete_post_btn_${post.id}" onclick="delete_post('${post.id}')">
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -97,13 +121,18 @@ const get_posts = async () => {
                         document.querySelectorAll('.like img')[index].src = "/client/assets/images/icons/liked.svg";
                     }
 
+                    if (userOwns) {
+                        document.querySelectorAll('.delete button')[index].style.display = 'block';
+                        document.querySelectorAll('.edit button')[index].style.display = 'block';
+                    }
+
                 } else {
                     posts_div.innerHTML += `
                     <div class="card post_card">
                         <div class="card-header post_head">
                         <div class="profile_pic_user">
                             <img src="${user_det.user.profile_picture}" alt="" width="50px" height="50px">
-                            <p>${user_det.user.full_name}</p>
+                            <p>${user_det.user.full_name} @${user_det.user.username}</p>
                         </div>
     
                             <div class="daysince_more_options">
@@ -131,17 +160,43 @@ const get_posts = async () => {
                                     </a>
                                     <p>Comment</p>
                                 </div>
+                                
                                 <div class="edit">
                                     <a href="/client/pages/posts/edit-post.html?id=${post.id}">
                                         <img src="/client/assets/images/icons/edit.svg" alt="">
+                                        <p>Edit</p>
                                     </a>
-                                    <p>Edit</p>
+                                    
                                 </div>
+
                                 <div class="delete">
-                                    <a href="/client/pages/posts/delete-post.html?id=${post.id}">
+                                    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#deleteModal-${post.id}" onclick="delete_post('${post.id}')">
                                         <img src="/client/assets/images/icons/delete.svg" alt="">
-                                    </a>
-                                    <p>Delete</p>
+                                        Delete
+                                    </button>
+
+                                    <div class="modal fade" id="deleteModal-${post.id}" tabindex="-1" aria-labelledby="deleteModal-${post.id}Label" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="deleteModal-${post.id}Label">Delete Post</h5>
+                                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Are you sure you want to delete this post?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="button" class="btn btn-danger" id="delete_post_btn_${post.id}" onclick="delete_post('${post.id}')">
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
     
@@ -152,14 +207,23 @@ const get_posts = async () => {
                     if (isLiked) {
                         document.querySelectorAll('.like img')[index].src = "/client/assets/images/icons/liked.svg";
                     }
+
+                    if (userOwns) {
+                        document.querySelectorAll('.delete button')[index].style.display = 'block';
+                        document.querySelectorAll('.edit button')[index].style.display = 'block';
+                    } else {
+                        document.querySelectorAll('.delete button')[index].style.display = 'none';
+                        document.querySelectorAll('.edit button')[index].style.display = 'none';
+                    }
                 }
-            })
+            })    
         }
 
     } catch (error) {
         console.log(error);
     }
 }
+
 
 window.addEventListener('DOMContentLoaded', (event) => {
     get_posts();

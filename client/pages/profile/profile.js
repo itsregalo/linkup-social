@@ -50,12 +50,9 @@ const get_user_profile = async () => {
             <div class="user_info">
                 <h6>${data.user.full_name}</h6>
                 <p>@${data.user.username}</p>
-                <p>Software Developer</p>
 
                 <div class="user_bio">
-                    Tech Bro ✌️ 
-                    Scrap Restorations 🔧
-                    Wannabe Drag Racer 🏎
+                    <p>${data.user.bio}</p>
                 </div>
                 <div class="location_date_joined">
                     <div class="location">
@@ -64,7 +61,7 @@ const get_user_profile = async () => {
                     </div>
                     <div class="date_joined">
                         <img src="/client/assets/images/icons/calender.svg" alt="">
-                        <a href="">Joined 2021</a>
+                        <a href="">Joined 2023</a>
                     </div>
                 </div>
 
@@ -158,16 +155,51 @@ const get_user_profile = async () => {
                         <div class="card-footer">
                             <div class="like_comment_share">
                                 <div class="like">
-                                    <img src="/client/assets/images/icons/like-outline.svg" alt="">
+                                    <img src="/client/assets/images/icons/like-outline.svg" alt="" onclick="likeOrUnlikePost('${post.id}')">
                                     <p>Like</p>
                                 </div>
                                 <div class="comment">
-                                    <img src="/client/assets/images/icons/comment-outline.svg" alt="">
+                                    <a href="/client/pages/posts/post-detail.html?id=${post.id}">
+                                        <img src="/client/assets/images/icons/comment-outline.svg" alt="">
+                                    </a>
                                     <p>Comment</p>
                                 </div>
-                                <div class="share">
-                                    <img src="/client/assets/images/icons/share-24.svg" alt="">
-                                    <p>Share</p>
+                                
+                                <div class="edit">
+                                    <a href="/client/pages/posts/edit-post.html?id=${post.id}">
+                                        <img src="/client/assets/images/icons/edit.svg" alt="">
+                                        <p>Edit</p>
+                                    </a>
+                                </div>
+
+                                <div class="delete">
+                                    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#deleteModal-${post.id}" onclick="delete_post('${post.id}')">
+                                        <img src="/client/assets/images/icons/delete.svg" alt="">
+                                        Delete
+                                    </button>
+
+                                    <div class="modal fade" id="deleteModal-${post.id}" tabindex="-1" aria-labelledby="deleteModal-${post.id}Label" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="deleteModal-${post.id}Label">Delete Post</h5>
+                                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Are you sure you want to delete this post?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="button" class="btn btn-danger" id="delete_post_btn_${post.id}" onclick="delete_post('${post.id}')">
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
     

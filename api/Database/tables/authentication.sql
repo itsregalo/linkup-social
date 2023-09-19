@@ -11,3 +11,7 @@ CREATE TABLE user_reset_tokens (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+-- ALTER TABLE user_reset_tokens
+-- ADD COLUMN is_expired BOOLEAN DEFAULT FALSE;
+
+

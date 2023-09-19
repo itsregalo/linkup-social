@@ -6,6 +6,9 @@ const { userRegistrationController } = require('./authenticationController');
 
 // User registration tests
 describe('User Registration Tests', () => {
+    afterEach(()=>{
+        jest.clearAllMocks()
+    })
     // Test 1: Checking if all fields are filled
     it('Checking if all fields are filled', async () => {
         const req = {
@@ -138,7 +141,7 @@ describe('User Registration Tests', () => {
 
         await userRegistrationController(req, res)
 
-        expect(res.status).toHaveBeenCalledWith(500)
+        expect(res.status).toHaveBeenCalledWith(201)
         expect(res.json).toHaveBeenCalledWith({
             token: expect.any(String),
             user: expect.any(Object),

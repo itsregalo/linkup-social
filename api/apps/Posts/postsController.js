@@ -163,26 +163,6 @@ const createPostController = async (req, res) => {
             });
         }
 
-        // checking if the user has uploaded a picture
-        if (picture) {
-            // const cloudinaryOptions = {
-            //     use_filename: true,
-            //     unique_filename: false,
-            //     overwrite: true,
-            //     resource_type: "auto"
-            // };
-            // // uploading the picture to cloudinary
-            // const uploadedPicture = await cloudinary.uploader.upload(picture, cloudinaryOptions, (error, result) => {
-            //     if (error) {
-            //         return res.status(500).json({
-            //             error: error.message    
-            //         });
-            //     }
-            // });
-
-            // picture = uploadedPicture.secure_url;
-        }
-
         // check for tagged users in the content
         const tagged_users = await getTaggedUsers(content);
 
@@ -500,6 +480,42 @@ const getPostsOfFollowedUsers = async (req, res) => {
     }
 }
 
+const checkIfUserOwnsPost = async (req, res) => {
+    try {
+        const authenticated_user = req.user;
+        const {id} = req.params;
+
+        const pool = await mssql.connect(sqlConfig);
+
+        // checking if the post exist
+        const post = await pool.request()
+            .input('id', mssql.VarChar, id)
+            .execute('get_post_by_id_proc');
+            
+        if (post.recordset.length === 0) {
+            return res.status(404).json({
+                message: 'Post not found'
+            });
+        }
+
+        if (post.recordset[0].user_id !== authenticated_user.id) {
+            return res.status(401).json({
+                message: 'You cannot delete this post!',
+                owner: false
+            });
+        } else {
+            return res.status(200).json({
+                message: 'Owner',
+                owner: true
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }
+}
+
 module.exports = {
     createPostController,
     getAllPostsController,
@@ -513,4 +529,5 @@ module.exports = {
     getPostsOfFollowedUsers,
 
     likeUnlikePostController,
+    checkIfUserOwnsPost
 }

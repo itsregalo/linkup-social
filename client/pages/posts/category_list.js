@@ -12,12 +12,12 @@ if (!token) {
     const is_authenticated = true;
 }
 
-
+const category_id = window.location.search.split('=')[1];
 
 // getting a ist of all posts from the database
 const get_posts = async () => {
     try {
-        const data = await fetch(`${base_url}/posts/current/all`, {
+        const data = await fetch(`${base_url}/categories/post/category/${category_id}`, {
             headers: {
                 'Content-Type': 'application/json'
             }

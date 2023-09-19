@@ -45,6 +45,17 @@ const getUserFollowingController = async (req, res) => {
             .input('user_id', mssql.VarChar(50), id)
             .execute('get_user_following_proc');
 
+            // checking if user exists
+        const user = await pool.request()
+            .input('id', mssql.VarChar(50), id)
+            .execute('get_user_by_id_proc');
+
+        if(user.recordset.length === 0) {
+            return res.status(404).json({
+                message: 'User not found'
+            });
+        }
+
         return res.status(200).json({
             user_following: user_following.recordset
         });

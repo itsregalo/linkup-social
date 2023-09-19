@@ -125,8 +125,8 @@
                             </div>
                         </div>
 
-                        <div class="user_posts" id="user_posts" style="margin-top: 20px;">
-                            <div class="card">
+                        <div class="user_posts" id="user_posts" style="margin-top: 20px; margin-bottom: 20px;">
+                            <div class="card" style="margin-bottom: 20px;">
                                 <form method="POST" class="mb-3 p-3" id="update_profile_form" enctype="multipart/form-data">
                                     <input type="hidden" name="_method" value="put">
                     
@@ -153,11 +153,6 @@
                                     <div class="form-group">
                                         <label for="profile_picture">Profile Picture</label>
                                         <input type="file" class="form-control-file" id="profile_picture" name="profile_picture">
-                                    </div>
-                    
-                                    <div class="form-group">
-                                        <label for="background_picture">Background Picture</label>
-                                        <input type="file" class="form-control-file" id="background_picture" name="background_picture">
                                     </div>
                     
                                     <button type="submit" class="btn btn-primary">Update</button>

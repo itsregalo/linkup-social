@@ -30,7 +30,7 @@ const post_details = async () => {
         card_top.innerHTML = ``;
         card_top.innerHTML += `
             <div class="profile_pic_user">
-                <img src="/client/assets/images/users/elon.jpg" alt="" width="50px" height="50px">
+                <img src="${post_user.user.profile_picture}" alt="" width="50px" height="50px">
                 <p>${post_user.user.full_name}</p>
             </div>
 
@@ -47,6 +47,12 @@ const post_details = async () => {
             <div class="caption">
                 <p>${post.post.content}</p>
             </div>
+        `;
+
+        const current_user_profile_pic = document.querySelector('.current_user_profile_pic');
+        current_user_profile_pic.innerHTML = ``;
+        current_user_profile_pic.innerHTML += `
+            <img src="${logged_in_user.user.profile_picture}" alt="" width="40px" height="40px">
         `;
 
         const comment_form = document.querySelector('#comment_post_form');
@@ -69,7 +75,7 @@ const post_details = async () => {
                     comments_section.innerHTML += `
                         <div class="comment_card">
                             <div class="current_user_profile_pic">
-                                <img src="/client/assets/images/users/khairo.jpg" alt="" width="40px" height="40px">
+                                <img src="${user_data.user.profile_picture}" alt="" width="40px" height="40px">
                             </div>
                             <div class="comment_content">
                                 <div class="comment_name_username">

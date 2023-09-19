@@ -258,7 +258,7 @@ const forgotPasswordController = async (req, res) => {
                 <h2>Click on the link below to reset your password</h2>
                 <p>
                 <button>
-                    <a href="${process.env.CLIENT_URL}/reset-password/${token}">Reset password</a>
+                    <a href="${process.env.CLIENT_URL}/reset-password.html?=${token}">Reset password</a>
                 </button>
                 </p>
             `
@@ -300,7 +300,6 @@ const forgotPasswordController = async (req, res) => {
 const resetPasswordController = async (req, res) => {
     try {
         const {reset_token, new_password, repeat_password} = req.body;
-
         // validating the email
         if(!(reset_token && new_password && repeat_password)) {
             return res.status(400).json({
@@ -332,7 +331,7 @@ const resetPasswordController = async (req, res) => {
 
         // hashing the password
         const salt = await bcrypt.genSalt(10); // generating a salt
-        const hashedPassword = await bcrypt.hash(newPassword, salt);
+        const hashedPassword = await bcrypt.hash(new_password, salt);
 
         // updating the password
         const updatedUser = await pool.request()
@@ -345,6 +344,7 @@ const resetPasswordController = async (req, res) => {
         });
 
     } catch (error) {
+        console.log(error);
         return res.status(500).json({
             error: error.message
         });
