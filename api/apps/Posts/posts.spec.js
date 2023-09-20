@@ -1,5 +1,10 @@
 const mssql = require("mssql")
-const { getAllPostsController, getActivePostsController, getUserPostsController, createPostController, updatePostController, deletePostController, likeUnlikePostController, getPostComments } = require("./postsController")
+const { getAllPostsController, getActivePostsController, 
+    getUserPostsController, createPostController, 
+    updatePostController, deletePostController, 
+    likeUnlikePostController, getPostComments, checkIfUserOwnsPost, getPostsOfFollowedUsers } = require("./postsController")
+
+jest.mock("mssql")
 
 const res = {
     status: jest.fn().mockReturnThis(),
@@ -595,14 +600,308 @@ describe("Posts Controller Tests", () => {
 
             await getPostComments(req, res)
 
-            // expect(res.status).toHaveBeenCalledWith(404)
+            expect(res.status).toHaveBeenCalledWith(404)
             expect(res.json).toHaveBeenCalledWith({
                 message: "Post not found"
             })
         })
     })
 
+    describe("checkIfUserOwnsPost", () => {
+        it('Should return 404 if post does not exist',  async() => {
+            const req = {
+                user: {
+                    id: 'some_authenticated_user_id'
+                },
+                params: {
+                    id: 'non_existent_post_id'
+                }
+            };
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+    
+            const pool = {
+                request: jest.fn().mockReturnThis(),
+                input: jest.fn().mockReturnThis(),
+                execute: jest.fn().mockReturnValue({
+                    recordset: []
+                })
+            };
+    
+            jest.spyOn(mssql, 'connect').mockResolvedValue(pool);
+    
+            await checkIfUserOwnsPost(req, res);
+    
+            expect(res.status).toHaveBeenCalledWith(404);
+            expect(res.json).toHaveBeenCalledWith({
+                message: "Post not found"
+            });
+        });
+    
+        it('Should return 401 if user does not own the post',  async() => {
+            const req = {
+                user: {
+                    id: 'authenticated_user_id'
+                },
+                params: {
+                    id: 'post_id_not_owned_by_authenticated_user'
+                }
+            };
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+    
+            const pool = {
+                request: jest.fn().mockReturnThis(),
+                input: jest.fn().mockReturnThis(),
+                execute: jest.fn().mockReturnValue({
+                    recordset: [{ user_id: 'different_user_id' }]
+                })
+            };
+    
+            jest.spyOn(mssql, 'connect').mockResolvedValue(pool);
+    
+            await checkIfUserOwnsPost(req, res);
+    
+            expect(res.status).toHaveBeenCalledWith(401);
+            expect(res.json).toHaveBeenCalledWith({
+                message: "You cannot delete this post!",
+                owner: false
+            });
+        });
+    
+        it('Should return 200 if user owns the post',  async() => {
+            const req = {
+                user: {
+                    id: 'authenticated_user_id'
+                },
+                params: {
+                    id: 'post_id_owned_by_authenticated_user'
+                }
+            };
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+    
+            const pool = {
+                request: jest.fn().mockReturnThis(),
+                input: jest.fn().mockReturnThis(),
+                execute: jest.fn().mockReturnValue({
+                    recordset: [{ user_id: 'authenticated_user_id' }]
+                })
+            };
+    
+            jest.spyOn(mssql, 'connect').mockResolvedValue(pool);
+    
+            await checkIfUserOwnsPost(req, res);
+    
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith({
+                message: "Owner",
+                owner: true
+            });
+        });
+    
+        it('Should return 500 if an error occurs',  async() => {
+            const req = {
+                user: {
+                    id: 'authenticated_user_id'
+                },
+                params: {
+                    id: 'some_post_id'
+                }
+            };
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+    
+            const errorMessage = 'An error occurred';
+    
+            const pool = {
+                request: jest.fn().mockReturnThis(),
+                input: jest.fn().mockReturnThis(),
+                execute: jest.fn().mockRejectedValue(new Error(errorMessage))
+            };
+    
+            jest.spyOn(mssql, 'connect').mockResolvedValue(pool);
+    
+            await checkIfUserOwnsPost(req, res);
+    
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.json).toHaveBeenCalledWith({
+                error: errorMessage
+            });
+        });
+    });
 
+    describe("getPostsOfFollowedUsers", () => {
+        it('Should return posts of followed users',  async() => {
+            const req = {
+                user: {
+                    id: 'authenticated_user_id'
+                }
+            };
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
 
+            const postsData = [
+                { post_id: 1, content: 'Post 1' },
+                { post_id: 2, content: 'Post 2' }
+            ];
+
+            const pool = {
+                request: jest.fn().mockReturnThis(),
+                input: jest.fn().mockReturnThis(),
+                execute: jest.fn().mockReturnValue({
+                    recordset: postsData
+                })
+            };
+
+            jest.spyOn(mssql, 'connect').mockResolvedValue(pool);
+
+            await getPostsOfFollowedUsers(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith({
+                posts: postsData
+            });
+        });
+
+        it('Should return 500 if an error occurs',  async() => {
+            const req = {
+                user: {
+                    id: 'authenticated_user_id'
+                }
+            };
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+
+            const errorMessage = 'An error occurred';
+
+            const pool = {
+                request: jest.fn().mockReturnThis(),
+                input: jest.fn().mockReturnThis(),
+                execute: jest.fn().mockRejectedValue(new Error(errorMessage))
+            };
+
+            jest.spyOn(mssql, 'connect').mockResolvedValue(pool);
+
+            await getPostsOfFollowedUsers(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.json).toHaveBeenCalledWith({
+                error: errorMessage
+            });
+        });
+    });
+
+    describe("getPostComments", () => {
+        it('Should return comments for a valid post',  async() => {
+            const commentsData = [
+                { comment_id: 1, content: 'Comment 1' },
+                { comment_id: 2, content: 'Comment 2' }
+            ];
+
+            const req = {
+                params: {
+                    id: 'valid_post_id'
+                }
+            };
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+    
+            const post = { recordset: [
+                { post_id: 1, content: 'Post 1' }
+            ]};
+                
+            
+    
+            const pool = {
+                request: jest.fn()
+                    .mockReturnThis()
+                    .mockImplementationOnce(() => post)
+                    .mockImplementationOnce(() => ({ recordset: commentsData }))
+            };
+    
+            jest.spyOn(mssql, 'connect').mockResolvedValue(pool);
+    
+            await getPostComments(req, res);
+    
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith({
+                comments: commentsData
+            });
+            
+        });
+    
+        it('Should return 404 if post does not exist',  async() => {
+            const req = {
+                params: {
+                    id: 'non_existent_post_id'
+                }
+            };
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+    
+            const pool = {
+                request: jest.fn().mockReturnThis(),
+                input: jest.fn().mockReturnThis(),
+                execute: jest.fn().mockReturnValue({
+                    recordset: []
+                })
+            };
+    
+            jest.spyOn(mssql, 'connect').mockResolvedValue(pool);
+    
+            await getPostComments(req, res);
+    
+            expect(res.status).toHaveBeenCalledWith(404);
+            expect(res.json).toHaveBeenCalledWith({
+                message: "Post not found"
+            });
+        });
+    
+        it('Should return 500 if an error occurs',  async() => {
+            const req = {
+                params: {
+                    id: 'valid_post_id'
+                }
+            };
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+    
+            const errorMessage = 'An error occurred';
+    
+            const pool = {
+                request: jest.fn().mockReturnThis(),
+                input: jest.fn().mockReturnThis(),
+                execute: jest.fn().mockRejectedValue(new Error(errorMessage))
+            };
+    
+            jest.spyOn(mssql, 'connect').mockResolvedValue(pool);
+    
+            await getPostComments(req, res);
+    
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.json).toHaveBeenCalledWith({
+                error: errorMessage
+            });
+        });
+    });
 
 })

@@ -19,8 +19,27 @@ const submitLoginForm = async (user) => {
         if (response.status === 200) {
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
+
+            setTimeout(() => {
+                document.querySelector('.message').innerHTML = `
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Success!</strong> Login successful.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `;
+            }, 1000);
+
             window.location.href = "/client/index.html";
-        } 
+        }  else {
+            setTimeout(() => {
+                document.querySelector('.message').innerHTML = `
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Oops!</strong> ${data.message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `;
+            }, 1000);
+        }
     }
     catch (error) {
         console.log(error);
@@ -45,17 +64,7 @@ const loginFormSubmitEvent = () => {
                     </div>
                 `;
             }, 1000);
-        } else {
-            setTimeout(() => {
-                document.querySelector('.message').innerHTML = `
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <strong>Success!</strong> Login successful.
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                `;
-            }, 1000);
-        }
-
+        } 
         const user = {
             email,
             password

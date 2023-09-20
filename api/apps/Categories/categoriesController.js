@@ -21,11 +21,13 @@ const createPostCategoryController = async (req, res) => {
             .input('name', mssql.VarChar, name)
             .execute('get_category_by_name_proc');
 
-        if (category.recordset.length > 0) {
+            if (category.recordset.length > 0) {
             return res.status(400).json({
                 message: 'Category already exist'
             });
         }
+
+  
 
         // creating the category
         const newCategory = await pool.request()
