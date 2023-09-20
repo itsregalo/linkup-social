@@ -4,7 +4,7 @@
   "description": "Social App",
   "main": "App.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --watch",
     "start": "node App.js",
     "dev": "nodemon App.js"
   },
@@ -26,6 +26,7 @@
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.4",
     "nodemon": "^3.0.1",
+    "supertest": "^6.3.3",
     "uuid": "^9.0.0"
   }
 }

@@ -378,11 +378,18 @@ body {
     padding: 0px 10px 0px 10px;
 }
 
-.like, .comment, .share {
+.like, .comment, .share, .delete, .edit {
     display: flex;
     gap: 5px;
     padding: 0px 10px 0px 10px;
     cursor: pointer;
+}
+
+.edit a {
+    display: flex;
+    gap: 5px;
+    padding: 0px 10px 0px 10px;
+    cursor: pointer; 
 }
 
 /* Profile */
@@ -552,8 +559,8 @@ body {
 
 .comment_form {
     display: flex;
+    width: 100%;
     align-items: center;
-    justify-content: space-between;
     gap: 10px;
     padding: 10px;
 }
@@ -562,7 +569,7 @@ body {
     border-radius: 50%;
 }
 
-.comment_input {
+.comment_input form {
     width: 100%;
     border: 1px solid #a3a3a3;
     outline: none;

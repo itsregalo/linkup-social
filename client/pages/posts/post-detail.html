@@ -13,7 +13,7 @@
 <body>
 
     <div class="loader">
-        <img src="/client/assets/images/link_up_logo.png" alt="" width="70%">
+        <img src="/client/assets/images/logo.png" alt="" width="70%">
     </div>
     
     <div class="container-fluid main-content">
@@ -21,7 +21,7 @@
             <div class="col-12">
                 <div class="col-2 menu">
                     <div class="logo">
-                        <img src="/client/assets/images/link_up_logo.png" alt="" width="70%">
+                        <img src="/client/assets/images/logo.png" alt="" width="70%">
                     </div>
     
                     <div class="main-nav">
@@ -82,27 +82,16 @@
                         </div>
                     </div>
     
-                    <div class="posts">
+                    <div class="posts" id="post_details">
                         
                         <div class="card post_card">
 
-                            <div class="card-header post_head">
-                                <div class="profile_pic_user">
-                                    <img src="/client/assets/images/users/elon.jpg" alt="" width="50px" height="50px">
-                                    <p>Elon Musk</p>
-                                </div>
-        
-                                <div class="daysince_more_options">
-                                    <p>2 days ago</p>
-                                    <img src="/client/assets/images/icons/more-2-fill.svg" alt="">
-                                </div>
+                            <div class="card-header post_head" id="post_detail_head">
+                                
                             </div>
 
-                            <div class="card-body">
-                                <img src="/client/assets/images/trump.png" alt="" width="100%">
-                                <div class="caption">
-                                    <p>Next Level #Trump</p>
-                                </div>
+                            <div class="card-body" id="post_detail_body">
+                               
                             </div>
 
                             <div class="card-footer">
@@ -126,80 +115,20 @@
                                         <img src="/client/assets/images/users/jumaallan.jpg" alt="" width="40px" height="40px">
                                     </div>
 
-                                    <div class="comment_input">
-                                        <input type="text" placeholder="Write a comment...">
-                                        <button type="submit">
-                                            <img src="/client/assets/images/icons/send.svg" alt="">
-                                        </button>
+                                    <div class="comment_input" id="comment_input">
+                                        <form action="" method="post" id="comment_post_form">
+                                            <input type="text" placeholder="Write a comment..." name="comment" id="comment_input_field">
+                                            <button type="submit">
+                                                <img src="/client/assets/images/icons/send.svg" alt="">
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
 
-                                <div class="comments_section pt-3">
-                                    <div class="comment_card">
-                                        <div class="current_user_profile_pic">
-                                            <img src="/client/assets/images/users/khairo.jpg" alt="" width="40px" height="40px">
-                                        </div>
-                                        <div class="comment_content">
-                                            <div class="comment_name_username">
-                                                <a href="/client/profile.html">
-                                                    <h6>Khalif Khairo</h6>
-                                                    <p>@khalifkairo</p>
-                                                </a>
-                                            </div>
-                                            <div class="replying_to">
-                                                <p>Replying to <a href="">@elonmusk</a></p>
-                                            </div>
-                                            <div class="comment_text">
-                                                <p>
-                                                    “May you live forever” is the worst possible curse once you understand deep time
-                                                </p>
-                                            </div>
-                                            
-                                            <div class="comment_actions">
-                                                <div class="comment_like">
-                                                    <img src="/client/assets/images/icons/like-outline.svg" alt="">
-                                                    <p>Like</p>
-                                                </div>
-                                                <div class="comment_reply">
-                                                    <img src="/client/assets/images/icons/reply.svg" alt="">
-                                                    <p>Reply</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="comments_section pt-3" id="comments_section">
+                                    
 
-                                    <div class="comment_card" style="padding-left: 20px;">
-                                        <div class="current_user_profile_pic">
-                                            <img src="/client/assets/images/users/khairo.jpg" alt="" width="40px" height="40px">
-                                        </div>
-                                        <div class="comment_content">
-                                            <div class="comment_name_username">
-                                                <a href="/client/profile.html">
-                                                    <h6>Khalif Khairo</h6>
-                                                    <p>@khalifkairo</p>
-                                                </a>
-                                            </div>
-                                            <div class="replying_to">
-                                                <p>Replying to <a href="">@elonmusk</a></p>
-                                            </div>
-                                            <div class="comment_text">
-                                                <p>
-                                                    “May you live forever” is the worst possible curse once you understand deep time
-                                                </p>
-                                            </div>
-                                            
-                                            <div class="comment_actions">
-                                                <div class="comment_like">
-                                                    <img src="/client/assets/images/icons/like-outline.svg" alt="">
-                                                    <p>Like</p>
-                                                </div>
-                                                <div class="comment_reply">
-                                                    <img src="/client/assets/images/icons/reply.svg" alt="">
-                                                    <p>Reply</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                             </div>
 
@@ -209,10 +138,10 @@
     
                 <div class="col-3 most-right">
                     <div class="new_post">
-                        <form class="new_post_form" action="" method="post">
-                            <textarea name="" id="" cols="30" rows="5" placeholder="What's on your mind?"></textarea>
+                        <form class="new_post_form" action="" method="post" id="new_post_form" enctype="multipart/form-data">
+                            <textarea name="content" id="form_post_content" cols="30" rows="5" placeholder="What's on your mind?"></textarea>
                             <div class="bottom_inputs">
-                                <input type="file" name="" id="" class="add_image_to_post">
+                                <input type="file" name="picture" id="form_post_picture" class="add_image_to_post" accept="image/*">
                                 <button class="btn" type="submit">Post</button>
                             </div>
                         </form>
@@ -324,5 +253,8 @@
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     <script src="/client/assets/js/main.js"></script>
+    <script type="module" src="/client/pages/posts/post_detail.js"></script>
+    <script src="/client/pages/posts/create_post.js"></script>
+
 </body>
 </html>

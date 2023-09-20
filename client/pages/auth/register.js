@@ -16,7 +16,7 @@ const submitRegisterForm = async (user) => {
         const data = await response.json();
         
         if (response.status === 201) {
-            window.location.href = "/client/auth/login.html";
+            window.location.href = "/client/pages/auth/login.html";
 
             setTimeout(() => {
                 document.querySelector('.message').innerHTML = `

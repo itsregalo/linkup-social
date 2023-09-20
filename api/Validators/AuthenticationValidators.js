@@ -11,7 +11,7 @@ const userRegistrationValidator = joi.object({
         'string.empty': 'Username is required'
     }),
     full_name: joi.string().min(4).max(50).required().messages({
-        'string.min': 'Full name must be at least 6 characters long',
+        'string.min': 'Full name must be at least 4 characters long',
         'string.max': 'Full name must be at most 50 characters long',
         'string.empty': 'Full name is required'
     }),

@@ -88,50 +88,15 @@
                     <div class="profile_area">
                         
                         <div class="user_profile_area" id="user_profile_area">
-                            <div class="background_image">
-                                <img src="/client/assets/images/users/kotlin_bg.jpg" alt="" width="100%">
-                                
-                            </div>
-
-                            <div class="profile_photo">
-                                <img src="/client/assets/images/users/itsregalo.jpg" alt="" width="100px" height="100px">
-                                <div class="edit_profile_btn">
-                                    <button type="button" class="btn btn btn-outline-primary">Edit Profile</button>
-                                </div>
-                            </div>
                             
-                            <div class="user_info">
-                                
 
-                                <div class="user_bio">
-                                    
-                                </div>
-                                <div class="location_date_joined">
-                                    <div class="location">
-                                        <img src="/client/assets/images/icons/location.svg" alt="">
-                                        <a href=""></a>
-                                    </div>
-                                    <div class="date_joined">
-                                        <img src="/client/assets/images/icons/calender.svg" alt="">
-                                        <a href="">Joined 2023</a>
-                                    </div>
-                                </div>
-
-                                <div class="user_follow_followers">
-                                    <div class="following_count">
-                                        <span class="count">1</span>
-                                        <a href="/client/pages/followers/following.html" class="light_link">Following</a>
-                                    </div>
-                                    <div class="followers_count">
-                                        <span class="count">2.5 M</span>
-                                        <a href="/client/pages/followers/followers.html" class="light_link">Followers</a>
-                                    </div>
-                                </div>
-                            </div>
+                            
+                            
+                            
                         </div>
 
                         <div class="posts_navigation">
-                            <a class="active" href="">Your Posts</a>
+                            <a class="active" href="">User Posts</a>
                             <a href="">Likes/Commented Posts</a>
                         </div>
 
@@ -143,10 +108,10 @@
     
                 <div class="col-3 most-right">
                     <div class="new_post">
-                        <form class="new_post_form" action="" method="post">
-                            <textarea name="" id="" cols="30" rows="5" placeholder="What's on your mind?"></textarea>
+                        <form class="new_post_form" action="" method="post" id="new_post_form" enctype="multipart/form-data">
+                            <textarea name="content" id="form_post_content" cols="30" rows="5" placeholder="What's on your mind?"></textarea>
                             <div class="bottom_inputs">
-                                <input type="file" name="" id="" class="add_image_to_post">
+                                <input type="file" name="picture" id="form_post_picture" class="add_image_to_post" accept="image/*">
                                 <button class="btn" type="submit">Post</button>
                             </div>
                         </form>
@@ -245,39 +210,7 @@
 
                 <div class="modal-body">
                     <form action="" id="update_user_profile_form">
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" class="form-control" id="update_username" name="username" value="">
-                        </div>
 
-                        <div class="form-group">
-                            <label for="full_name">Full Name</label>
-                            <input type="text" class="form-control" id="update_full_name" name="full_name" value="">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="location">Location</label>
-                            <input type="text" class="form-control" id="update_location" name="location" value="">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="bio">Bio</label>
-                            <textarea class="form-control" id="update_bio" name="bio">
-
-                            </textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="profile_picture">Profile Picture</label>
-                            <input type="file" class="form-control-file" id="update_profile_picture" name="profile_picture">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="background_picture">Background Picture</label>
-                            <input type="file" class="form-control-file" id="update_background_picture" name="background_picture">
-                        </div>
-
-                        <button type="submit" class="btn btn-primary">Update Profile</button>
                     </form>
                 </div>
 
@@ -293,7 +226,9 @@
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" 
         crossorigin="anonymous"></script>
     <script src="/client/assets/js/main.js"></script>
-    <script src="/client/pages/profile/profile.js"></script>
+    <script type="module" src="/client/pages/profile/user-profile.js"></script>
+    <script src="/client/pages/posts/create_post.js"></script>
+
     <script>
         window.addEventListener('load', ()=>{
             get_suggested_users()

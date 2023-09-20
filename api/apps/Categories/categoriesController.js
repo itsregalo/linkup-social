@@ -21,11 +21,13 @@ const createPostCategoryController = async (req, res) => {
             .input('name', mssql.VarChar, name)
             .execute('get_category_by_name_proc');
 
-        if (category.recordset.length > 0) {
+            if (category.recordset.length > 0) {
             return res.status(400).json({
                 message: 'Category already exist'
             });
         }
+
+  
 
         // creating the category
         const newCategory = await pool.request()
@@ -137,9 +139,45 @@ const deleteCategoryController = async (req, res) => {
 }
 
 
+const getPostByCategory = async (req, res) => {
+    try {
+        const {id} = req.params;
+
+        const pool = await mssql.connect(sqlConfig);
+
+        // checking if the category exist
+        const category = await pool.request()
+            .input('id', mssql.VarChar, id)
+            .execute('get_category_by_id_proc');
+
+        if(category.recordset.length === 0) {
+            return res.status(404).json({
+                message: 'Category not found'
+            });
+        }
+
+        // getting posts from category
+        const posts = await pool.request()
+            .input('category_id', mssql.VarChar(50), id)
+            .execute('get_all_posts_of_category_proc');
+
+        return res.status(200).json({
+            posts: posts.recordset
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            error: error.message
+        });
+    }
+}
+
+
+
 module.exports = {
     createPostCategoryController,
     getAllPostCategories,
     updateCategoryController,
-    deleteCategoryController
+    deleteCategoryController,
+    getPostByCategory
 }

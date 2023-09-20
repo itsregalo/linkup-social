@@ -34,7 +34,6 @@ BEGIN
     SELECT * FROM post_category;
 END;
 GO
-
 -- procedure: get category by name
 CREATE OR ALTER PROCEDURE get_category_by_name_proc(
     @name VARCHAR(255)
@@ -72,3 +71,12 @@ BEGIN
     DELETE FROM post_category WHERE id = @id;
 END;
 GO
+
+-- get all posts of a category
+CREATE OR ALTER PROCEDURE get_all_posts_of_category_proc(
+    @category_id VARCHAR(255)
+)
+AS
+BEGIN
+    SELECT * FROM posts WHERE category_id = @category_id;
+END;

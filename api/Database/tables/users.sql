@@ -9,12 +9,13 @@ CREATE TABLE users (
     full_name VARCHAR(255) NOT NULL,
     location VARCHAR(255),
     bio VARCHAR(255),
-    profile_picture VARCHAR(255),
-    background_picture VARCHAR(255),
+    profile_picture VARCHAR(255) DEFAULT 'https://static.thenounproject.com/png/5034901-200.png',
+    background_picture VARCHAR(255) DEFAULT 'https://res.cloudinary.com/ddv1q5oiq/image/upload/v1694688866/linkup/wmefvmvdlpvkkq0jyneb.jpg',
     password VARCHAR(255) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Table: user_followers
 DROP TABLE IF EXISTS users_reset_tokens;
 
 CREATE TABLE user_reset_tokens (

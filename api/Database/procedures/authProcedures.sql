@@ -164,7 +164,7 @@ CREATE OR ALTER PROCEDURE get_user_by_reset_token_proc
     @reset_token VARCHAR(255)
 AS
 BEGIN
-    SELECT * FROM user_reset_tokens WHERE token = @reset_token AND is_expired = 0;
+    SELECT * FROM user_reset_tokens WHERE token = @reset_token;
 END;
 GO
 

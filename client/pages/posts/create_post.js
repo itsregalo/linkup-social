@@ -9,10 +9,9 @@ const new_post_form = document.querySelector('#new_post_form');
 new_post_form.addEventListener('submit', (e) => {
     e.preventDefault();
 
+    const category = document.querySelector('#create_post_cats').value;
     const content = document.querySelector('#form_post_content').value;
     const picture = document.querySelector('#form_post_picture').files[0];
-
-    const picture_url = document.querySelector('#form_post_picture').value;
     
     // upload the picture to cloudinary
     const cloudinary_url = 'https://api.cloudinary.com/v1_1/ddv1q5oiq/image/upload';
@@ -33,6 +32,7 @@ new_post_form.addEventListener('submit', (e) => {
         const picture_url = data.secure_url;
 
         const form_data = {
+            category_id: category,
             content,
             picture: picture_url
         }
